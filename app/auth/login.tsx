@@ -1,7 +1,8 @@
 import { LoginForm } from "@/components/auth";
-import { Button, ScreenContainer } from "@/components/common";
+import { Button, ProcessingModal, ScreenContainer } from "@/components/common";
 import { loginSchema } from "@/forms/auth/login";
-import { useSession } from "@/hooks/useSession";
+import { useLoginMutation } from "@/store/api/auth";
+import { saveToken } from "@/utils/auth";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { Alert, Pressable, Text, View } from "react-native";
@@ -12,7 +13,7 @@ type LoginFormValues = {
 };
 
 export default function LoginScreen() {
-    const { login } = useSession();
+    const [loginRequest, { isLoading }] = useLoginMutation();
 
     const {
         control,
@@ -26,11 +27,25 @@ export default function LoginScreen() {
     });
 
     const handleLogin = async (data: LoginFormValues) => {
-        Alert.alert("Login", JSON.stringify(data));
+        const { upbCode, password } = data;
+        try {
+            const response = await loginRequest({
+                upbCode: Number(upbCode),
+                password,
+            }).unwrap();
+
+            await saveToken(response.token);
+
+            Alert.alert("Éxito", response.token);
+        } catch (err) {
+            console.error("Error al iniciar sesión", err);
+        }
     };
 
     return (
         <ScreenContainer variant="center_between">
+            <ProcessingModal visible={isLoading} />
+
             <View className="w-full px-5" style={{
                 gap: 25
             }} >
