@@ -19,6 +19,17 @@ export default function ProtectedLayout() {
     return (
         <Stack initialRouteName="home" screenOptions={{ headerShown: false }}>
             <Stack.Screen name="home" />
+            <Stack.Screen name="profile" options={{
+                headerShown: true,
+                headerBackVisible: true,
+                headerTransparent: true,
+                headerTitle: "Perfil",
+                headerTitleStyle: {
+                    fontFamily: "Outfit_600SemiBold",
+                    fontSize: 20,
+                },
+            }} />
+
             {/* <Stack.Screen name={userScreen} /> */}
         </Stack>
     );
