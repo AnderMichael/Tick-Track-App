@@ -31,13 +31,13 @@ export const authApi = createApi({
             }),
         }),
 
-        getMe: builder.query<{ user: User }, void>({
-            query: () => "/me",
+        getMe: builder.mutation<User, void>({
+            query: () => ({ url: "/me", method: "GET" }),
         }),
 
         confirmPassword: builder.mutation<void, ConfirmationPasswordForm>({
             query: (data) => ({
-                url: "/confirmation",
+                url: "/confirm",
                 method: "PATCH",
                 body: data,
             }),
@@ -47,7 +47,7 @@ export const authApi = createApi({
 
 export const {
     useLoginMutation,
-    useGetMeQuery,
+    useGetMeMutation,
     useConfirmPasswordMutation,
 } = authApi;
 

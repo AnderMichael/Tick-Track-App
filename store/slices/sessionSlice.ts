@@ -1,10 +1,18 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
+export type StudentData = {
+  semester: number;
+  inscriptions: any[];
+};
+
 export type User = {
-  id: string;
-  name: string;
+  upbCode: number;
   email: string;
-  role: string;
+  fullName: string;
+  role: "STUDENT" | "SUPERVISOR" | "ADMIN";
+  department: string;
+  isConfirmed: boolean;
+  student?: StudentData;
 };
 
 interface SessionState {
