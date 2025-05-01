@@ -41,8 +41,9 @@ export default function RootLayout() {
 
   return (
     <Provider store={store}>
-      <Stack screenOptions={{ headerShown: false }}>
+      <Stack initialRouteName="(protected)" screenOptions={{ headerShown: false }}>
         <Stack.Screen name="(protected)"/>
+        <Stack.Screen name="auth"/>
       </Stack>
     </Provider>
   );

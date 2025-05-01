@@ -23,7 +23,7 @@ const ProfileScreen = () => {
             <ScrollView contentContainerStyle={{ gap: 10, paddingVertical: 10 }}>
                 <Screen.Section>
                     <View className="items-center mb-6">
-                        <View className="w-24 h-24 bg-gray-300 rounded-full justify-center items-center">
+                        <View className="w-24 h-24 bg-gray-300 rounded-full justify-center items-center" style={{ elevation: 5 }}>
                             <Ionicons name="person" size={36} color="black" />
                         </View>
                         <Text className="mt-4 font-outfit-medium text-lg">

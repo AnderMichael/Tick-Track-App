@@ -9,7 +9,7 @@ export default function HomeHeader() {
     const { user } = useSession();
     return (
         <Screen.Section>
-            <View className="flex-row justify-between items-center mt-4">
+            <View className="flex-row justify-between items-center">
                 <View>
                     <Text className="text-xl font-outfit-bold">Bienvenid@!</Text>
                     <Text className="text-lg font-outfit-medium">{user?.fullName}</Text>
