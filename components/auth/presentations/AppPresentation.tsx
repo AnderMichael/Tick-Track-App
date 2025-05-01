@@ -1,10 +1,13 @@
+import { SandglassIcon } from '@/components/common/icon'
 import React from 'react'
-import { Text } from 'react-native'
+import { Text, View } from 'react-native'
 
 const AppPresentation = () => {
     return (
         <>
-            <Text className="text-center text-8xl mb-4">⌛</Text>
+            <View className='flex items-center justify-center mb-5'>
+                <SandglassIcon />
+            </View>
             <Text className="text-4xl font-outfit-bold">Tick Track</Text>
         </>
     )

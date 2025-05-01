@@ -5,9 +5,11 @@ export interface User {
     role: string;
     department: string;
     isConfirmed: boolean;
+    phone: string;
     student?: {
         semester: number;
         commitment?: any;
+        accountKey: string;
         inscriptions: any[];
     };
     administrative?: {

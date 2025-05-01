@@ -1,25 +1,22 @@
 import { WithRole } from "@/components/common";
 import { Role } from "@/constants/common/roles";
-import { Ionicons, MaterialIcons } from "@expo/vector-icons";
-import { Pressable, Text, View } from "react-native";
+import { useRouter } from "expo-router";
+import { View } from "react-native";
+import { ActionButton } from "../buttons";
 
 export default function HomeActions() {
+    const router = useRouter();
     return (
         <WithRole allowed={[Role.STUDENT]}>
-            <View className="flex-row justify-between">
-                <Pressable className="items-center flex-1">
-                    <View className="w-16 h-16 bg-gray-200 rounded-full justify-center items-center mb-2">
-                        <MaterialIcons name="qr-code" size={28} color="black" />
-                    </View>
-                    <Text className="font-outfit-medium">Cobrar Horas</Text>
-                </Pressable>
-
-                <Pressable className="items-center flex-1">
-                    <View className="w-16 h-16 bg-gray-200 rounded-full justify-center items-center mb-2">
-                        <Ionicons name="information" size={28} color="black" />
-                    </View>
-                    <Text className="font-outfit-medium">Sobre tu Beca</Text>
-                </Pressable>
+            <View className="flex flex-row justify-center gap-16">
+                <ActionButton onPress={() => router.push("/student/qrcode")}>
+                    <ActionButton.Icon name="qr-code" size={28} />
+                    <ActionButton.Title>Cobrar Horas</ActionButton.Title>
+                </ActionButton>
+                <ActionButton onPress={() => router.push("/student/scholarship")}>
+                    <ActionButton.Icon name="info" size={28} />
+                    <ActionButton.Title>Sobre Tu Beca</ActionButton.Title>
+                </ActionButton>
             </View>
         </WithRole>
     );

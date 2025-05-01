@@ -50,7 +50,7 @@ const ProfileScreen = () => {
                     </ReadonlyField>
 
                     <ReadonlyField label="Teléfono">
-                        <Text className="font-outfit-regular">{user?.email}</Text>
+                        <Text className="font-outfit-regular">{user?.phone}</Text>
                     </ReadonlyField>
 
                 </Screen.Section>

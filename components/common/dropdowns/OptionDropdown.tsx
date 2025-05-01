@@ -52,7 +52,7 @@ const OptionDropdown: React.FC<OptionDropdownProps> = ({
             itemTextStyle={{
                 fontFamily: 'Outfit_400Regular',
                 fontSize: 16,
-                color: 'gray',
+                color: 'black',
             }}
             placeholderStyle={{
                 fontFamily: 'Outfit_400Regular',

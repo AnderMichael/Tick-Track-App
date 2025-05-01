@@ -14,7 +14,7 @@ export default function HomeHeader() {
                     <Text className="text-xl font-outfit-bold">Bienvenid@!</Text>
                     <Text className="text-lg font-outfit-medium">{user?.fullName}</Text>
                 </View>
-                <TouchableOpacity className="p-4 rounded-full bg-gray-200 justify-center items-center" onPress={() => router.push("/profile")}>
+                <TouchableOpacity className="p-4 rounded-full bg-gray-200 justify-center items-center" onPress={() => router.push("/profile")} style={{ elevation: 3 }}>
                     <Ionicons name="person" size={24} color="black" />
                 </TouchableOpacity>
             </View>
