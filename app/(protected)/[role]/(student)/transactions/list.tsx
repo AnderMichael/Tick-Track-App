@@ -1,13 +1,15 @@
+import { Screen } from '@/components/common'
 import React from 'react'
-import { Text, View } from 'react-native'
 
 const StudentTransactionListScreen = () => {
     return (
-        <View>
-            <Text>
-                StudentTransactionListScreen
-            </Text>
-        </View>
+        <Screen>
+            <Screen.Section>
+                <Screen.Title>
+                    Listado de transacciones
+                </Screen.Title>
+            </Screen.Section>
+        </Screen>
     )
 }
 

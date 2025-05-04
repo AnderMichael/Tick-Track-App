@@ -38,7 +38,7 @@ interface SectionProps {
 
 const ScreenSection = ({ children }: SectionProps) => {
     return (
-        <View className="flex mx-5" style={{ gap: 15 }}>
+        <View className="flex px-5" style={{ gap: 15 }}>
             {children}
         </View>
     )

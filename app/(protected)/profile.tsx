@@ -29,6 +29,9 @@ const ProfileScreen = () => {
                         <Text className="mt-4 font-outfit-medium text-lg">
                             {roleDefinition(user?.role ?? "user")}
                         </Text>
+                        <Text className="mt-4 font-outfit-bold text-lg">
+                            {user?.department.toUpperCase() ?? "DPTO."}
+                        </Text>
                     </View>
                 </Screen.Section>
                 {/* Campos */}

@@ -1,35 +1,34 @@
-import { Screen, Sheet } from "@/components/common";
-import { useSession } from "@/hooks/common/useSession";
-import { useRouter } from "expo-router";
+import { ProcessingModal, Screen, Sheet } from "@/components/common";
+import { useSemester } from "@/context/home";
+import { useCommitmentInfoQuery } from "@/store/api/home";
+import { Text } from "react-native";
 
 export default function ScholarshipScreen() {
-    const { user } = useSession();
-    const router = useRouter();
+    const { inscription } = useSemester();
+    const { isLoading, isError, data: commitment, refetch } = useCommitmentInfoQuery({ commitment_id: inscription!!.commitment_id });
 
+    if (isLoading) return <ProcessingModal visible={isLoading} />;
+    if (isError || !commitment) return <Text>Error</Text>;
+
+    const { service_details } = commitment;
+    const { scholarship } = service_details;
     return (
         <Screen>
             <Screen.Section>
                 <Sheet>
-                    <Sheet.Title>Beca Convenio</Sheet.Title>
+                    <Sheet.Title>{scholarship.name}</Sheet.Title>
+
+                    <Sheet.Field>
+                        <Sheet.Value>Descripción</Sheet.Value>
+                    </Sheet.Field>
+
+                    <Sheet.Field>
+                        <Sheet.Name>{scholarship.description}</Sheet.Name>
+                    </Sheet.Field>
 
                     <Sheet.Field>
                         <Sheet.Name>Porcentaje</Sheet.Name>
-                        <Sheet.Value>100%</Sheet.Value>
-                    </Sheet.Field>
-
-                    <Sheet.Field>
-                        <Sheet.Name>Semestre</Sheet.Name>
-                        <Sheet.Value>1</Sheet.Value>
-                    </Sheet.Field>
-
-                    <Sheet.Field>
-                        <Sheet.Name>Fecha Inicio</Sheet.Name>
-                        <Sheet.Value>1 Febrero 2021</Sheet.Value>
-                    </Sheet.Field>
-
-                    <Sheet.Field>
-                        <Sheet.Name>Fecha Fin</Sheet.Name>
-                        <Sheet.Value>30 Junio 2025</Sheet.Value>
+                        <Sheet.Value>{service_details.percentage * 100} %</Sheet.Value>
                     </Sheet.Field>
                 </Sheet>
             </Screen.Section>
