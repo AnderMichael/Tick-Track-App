@@ -1,3 +1,4 @@
+import { SkeletonBox } from "@/components/common";
 import React from "react";
 import { Text, View } from "react-native";
 
@@ -18,14 +19,14 @@ function Card({
     className = "",
     isLoading = false,
 }: {
-    children: React.ReactNode;
+    children?: React.ReactNode;
     className?: string;
     isLoading?: boolean;
 }) {
 
     if (isLoading) {
         return (
-            <View className={`bg-gray-600 rounded-2xl p-4 h-24 flex-1 ${className}`} />
+            <SkeletonBox className={`bg-gray-600 rounded-2xl h-24 flex-1 ${className}`} />
         );
     }
 

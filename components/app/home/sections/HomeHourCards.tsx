@@ -14,30 +14,38 @@ const HomeHourCards = () => {
     const { inscription } = useSemester();
     const { semester_id } = inscription!!;
 
-    const { isLoading, data: tracksInfo, isError, refetch } = useTracksInfoQuery({ upbCode, semester_id });
+    const { isLoading, isFetching, data: tracksInfo, isError, refetch } = useTracksInfoQuery({ upbCode, semester_id });
 
     useEffect(() => {
         refetch();
     }, [inscription]);
 
-    if (isError) return <Text>Error</Text>;
+    if (isLoading || isFetching) return <TrackCard>
+        <TrackCard.Group>
+            <TrackCard.Card isLoading={isLoading || isFetching} />
+            <TrackCard.Card isLoading={isLoading || isFetching} />
+        </TrackCard.Group>
+        <TrackCard.Card isLoading={isLoading || isFetching} />
+    </TrackCard>
+
+    if (isError || !tracksInfo) return <Text>Error</Text>;
 
     return (
         <TrackCard>
             <TrackCard.Group>
-                <TrackCard.Card isLoading={isLoading}>
-                    <TrackCard.Value>{formatHourNumbers(tracksInfo!.completed)} hrs</TrackCard.Value>
+                <TrackCard.Card>
+                    <TrackCard.Value>{formatHourNumbers(tracksInfo.completed)} hrs</TrackCard.Value>
                     <TrackCard.Label>Completo</TrackCard.Label>
                 </TrackCard.Card>
 
-                <TrackCard.Card isLoading={isLoading}>
-                    <TrackCard.Value>{formatHourNumbers(tracksInfo!.remaining)} hrs</TrackCard.Value>
+                <TrackCard.Card>
+                    <TrackCard.Value>{formatHourNumbers(tracksInfo.remaining)} hrs</TrackCard.Value>
                     <TrackCard.Label>Faltante</TrackCard.Label>
                 </TrackCard.Card>
             </TrackCard.Group>
 
-            <TrackCard.Card isLoading={isLoading}>
-                <TrackCard.Value>{formatHourNumbers(tracksInfo!.total)} hrs</TrackCard.Value>
+            <TrackCard.Card>
+                <TrackCard.Value>{formatHourNumbers(tracksInfo.total)} hrs</TrackCard.Value>
                 <TrackCard.Label>Total</TrackCard.Label>
             </TrackCard.Card>
         </TrackCard>
