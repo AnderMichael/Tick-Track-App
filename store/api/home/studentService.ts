@@ -1,5 +1,5 @@
 import { environmentVariables } from "@/config";
-import { CommitmentInfo, TracksInfo } from "@/interfaces/student";
+import { CommitmentInfo, PaginatedTransactions, TracksInfo } from "@/interfaces/student";
 import { getToken } from "@/utils/auth";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 

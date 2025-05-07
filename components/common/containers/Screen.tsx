@@ -32,6 +32,19 @@ const ScreenTitle = ({ children, color }: TitleProps) => {
     )
 }
 
+interface SubTitleProps {
+    children: React.ReactNode
+    color?: string
+}
+
+const ScreenSubTitle = ({ children, color }: SubTitleProps) => {
+    return (
+        <Text className='text-lg font-outfit-regular' style={{ color: color || 'black' }}>
+            {children}
+        </Text>
+    )
+}
+
 interface SectionProps {
     children: React.ReactNode
 }
@@ -45,6 +58,7 @@ const ScreenSection = ({ children }: SectionProps) => {
 }
 
 Screen.Title = ScreenTitle;
+Screen.SubTitle = ScreenSubTitle;
 Screen.Section = ScreenSection;
 
 export { Screen };

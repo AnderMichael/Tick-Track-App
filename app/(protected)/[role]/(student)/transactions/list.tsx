@@ -1,16 +1,25 @@
-import { Screen } from '@/components/common'
-import React from 'react'
+import { Screen } from '@/components/common';
+import { TransactionsList } from '@/components/common/lists';
+import { useSemester } from '@/context/home';
+import React from 'react';
+import { Text } from 'react-native';
 
 const StudentTransactionListScreen = () => {
+    const { semester } = useSemester();
+
     return (
         <Screen>
             <Screen.Section>
-                <Screen.Title>
-                    Listado de transacciones
-                </Screen.Title>
+                <Screen.SubTitle>
+                    Correspondientes al{' '}
+                    <Text className="text-lg font-outfit-medium" style={{ color: 'black' }}>
+                        {semester!.label}
+                    </Text>
+                </Screen.SubTitle>
             </Screen.Section>
+            <TransactionsList />
         </Screen>
-    )
-}
+    );
+};
 
-export default StudentTransactionListScreen
+export default StudentTransactionListScreen;
