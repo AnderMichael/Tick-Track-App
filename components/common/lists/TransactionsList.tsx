@@ -1,10 +1,11 @@
-import { Screen, TransactionCard } from '@/components/common';
 import { useSemester } from '@/context/home';
 import { formatDate } from '@/helpers/common';
 import { useSession } from '@/hooks';
 import { useTransactionsQuery } from '@/store/api/home';
 import React, { useState } from 'react';
 import { FlatList, RefreshControl, Text, View } from 'react-native';
+import { Screen } from '../containers';
+import { TransactionCard } from '../cards';
 
 const TransactionsList = () => {
     const { semester } = useSemester();
@@ -20,8 +21,9 @@ const TransactionsList = () => {
     } = useTransactionsQuery({ upbCode: user!.upbCode, semester_id: semester!.value, page, limit });
 
     const renderItem = ({ item }: any) => (
-        <TransactionCard>
-            <TransactionCard.Title>{item.comment_student}</TransactionCard.Title>
+        <TransactionCard transaction_id={item.id}>
+            <TransactionCard.Title>{item.work_name}</TransactionCard.Title>
+            {/* <TransactionCard.Supervisor supervisor_name={item.administrative_name} /> */}
             <TransactionCard.Date date={formatDate(item.date)} />
             <TransactionCard.Id id={`TRB-${item.id}`} />
             <TransactionCard.Hours hours={item.hours} />

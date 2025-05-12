@@ -3,7 +3,7 @@ import { Stack } from "expo-router";
 
 export default function StudentTransactionsLayout() {
     return <Stack>
-        <Stack.Screen name="list" options={{
+        <Stack.Screen name="index" options={{
             headerTransparent: true,
             header: () => <CustomHeader title="Transacciones" />,
         }} />

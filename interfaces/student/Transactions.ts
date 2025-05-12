@@ -1,9 +1,11 @@
-interface Transaction {
+export interface Transaction {
     id: number;
     date: string;
     hours: number;
     comment_student: string;
     comment_administrative: string;
+    administrative_name: string;
+    work_name: string;
 }
 
 export interface PaginatedTransactions {

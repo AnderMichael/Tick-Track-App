@@ -3,9 +3,16 @@ import { Role } from "@/constants/common/roles";
 import { useRouter } from "expo-router";
 import { View } from "react-native";
 import { ActionButton } from "../buttons";
+import { useSemester } from "@/context/home";
 
 export default function HomeActions() {
     const router = useRouter();
+
+    const { inscription } = useSemester();
+    if (!inscription) {
+        return <></>;
+    }
+
     return (
         <WithRole allowed={[Role.STUDENT]}>
             <View className="flex flex-row justify-center gap-16">

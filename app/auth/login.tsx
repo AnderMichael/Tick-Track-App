@@ -52,7 +52,6 @@ export default function LoginScreen() {
             else router.replace("/home");
         } catch (err) {
             setErrorVisible(true);
-            console.error("Error al iniciar sesión", err);
         }
     };
 

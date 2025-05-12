@@ -1,12 +1,77 @@
-import React from 'react'
-import { Text, View } from 'react-native'
+import { OptionDropdown } from '@/components/common';
+import { useSemesterPerYearQuery } from '@/store/api/home';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Pressable, Text, View } from 'react-native';
+import { YearPickerModal } from '../pickers';
+import { useSemester } from '@/context/home';
 
 const AnnualPickerDropdown = () => {
-    return (
-        <View>
-            <Text>AnnualPickerDropdown</Text>
-        </View>
-    )
-}
+    const today = new Date();
+    const [yearSelected, setYearSelected] = useState(today.getFullYear());
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const {semester, setSemester} = useSemester();
+    const { isLoading, isFetching, isError, data: semesters, refetch, error } = useSemesterPerYearQuery({ year: yearSelected });
 
-export default AnnualPickerDropdown
+    const semesterOptions = useMemo(() => {
+        if (isLoading || isFetching) return [];
+        if (isError) return [];
+        if (!semesters) return [];
+
+        const options = semesters.data.map((semester) => ({
+            label: semester.name,
+            value: semester.id,
+        }));
+
+        return options;
+    }, [semesters]);
+
+    useEffect(() => {
+        refetch();
+        setSemester(semesterOptions[0]);
+    }, [yearSelected, semesterOptions]);
+
+    useEffect(() => {
+
+    }, [semester]);
+    return (
+        <>
+            <YearPickerModal
+                visible={isModalVisible}
+                onClose={() => setIsModalVisible(false)}
+                onSelectYear={(year) => setYearSelected(year)}
+                initialYear={yearSelected}
+            />
+
+            <Pressable
+                className="flex flex-1 flex-row justify-between bg-black py-4 px-6 mx-5 rounded-3xl"
+                onPress={() => setIsModalVisible(true)}
+            >
+                <Text className="text-white text-center font-outfit-bold">
+                    Gestión
+                </Text>
+                <Text className="text-white text-center font-outfit-medium">
+                    {yearSelected}
+                </Text>
+            </Pressable>
+
+            <OptionDropdown
+                data={semesterOptions}
+                value={semester}
+                onChange={setSemester}
+                placeholder="Sin semestres"
+                isLoading={isLoading || isFetching}
+            />
+            {semesterOptions.length === 0 &&
+                <View className="flex-1 items-center justify-center gap-5">
+                    <MaterialCommunityIcons name="credit-card-lock" color="gray" size={100} />
+                    <Text className="text-center text-2xl font-outfit-extralight px-5">
+                        Oops! Al parecer no existen semestres creados en el año seleccionado
+                    </Text>
+                </View>}
+        </>
+
+    );
+};
+
+export default AnnualPickerDropdown;

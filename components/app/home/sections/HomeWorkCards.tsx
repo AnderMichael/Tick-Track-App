@@ -1,24 +1,23 @@
-import { useSemester } from '@/context/home';
 import { formatHourNumbers } from '@/helpers/common';
-import { useSession } from '@/hooks';
-import { useTracksInfoQuery } from '@/store/api/home';
 import React, { useEffect } from 'react';
-import { Text } from 'react-native';
 import { TrackCard } from '../cards';
+import { useSession } from '@/hooks';
+import { useSemester } from '@/context/home';
+import { Text } from 'react-native';
+import { useWorkTracksInfoQuery } from '@/store/api/home';
 
-const HomeHourCards = () => {
-
+const HomeWorkCards = () => {
     const { user } = useSession();
     const { upbCode } = user!!;
 
-    const { inscription } = useSemester();
-    const { semester_id } = inscription!!;
+    const { semester } = useSemester();
+    const { value: semester_id } = semester!!;
 
-    const { isLoading, isFetching, data: tracksInfo, isError, refetch } = useTracksInfoQuery({ upbCode, semester_id });
+    const { isLoading, isFetching, data: workTracksInfo, isError, refetch } = useWorkTracksInfoQuery({ upbCode, semester_id });
 
     useEffect(() => {
         refetch();
-    }, [inscription]);
+    }, [semester]);
 
     if (isLoading || isFetching) return <TrackCard>
         <TrackCard.Group>
@@ -28,9 +27,9 @@ const HomeHourCards = () => {
         <TrackCard.Card isLoading={isLoading || isFetching} />
     </TrackCard>
 
-    if (isError || !tracksInfo) return <Text>Error</Text>;
+    if (isError || !workTracksInfo) return <Text>Error</Text>;
 
-    if (!inscription) {
+    if (!semester) {
         return <></>;
     }
 
@@ -38,22 +37,22 @@ const HomeHourCards = () => {
         <TrackCard>
             <TrackCard.Group>
                 <TrackCard.Card>
-                    <TrackCard.Value>{formatHourNumbers(tracksInfo.completed)} hrs</TrackCard.Value>
-                    <TrackCard.Label>Completo</TrackCard.Label>
+                    <TrackCard.Value>{workTracksInfo.open} Tbjos</TrackCard.Value>
+                    <TrackCard.Label>Abiertos</TrackCard.Label>
                 </TrackCard.Card>
 
                 <TrackCard.Card>
-                    <TrackCard.Value>{formatHourNumbers(tracksInfo.remaining)} hrs</TrackCard.Value>
-                    <TrackCard.Label>Faltante</TrackCard.Label>
+                    <TrackCard.Value>{workTracksInfo.closed} Tbjos</TrackCard.Value>
+                    <TrackCard.Label>Cerrados</TrackCard.Label>
                 </TrackCard.Card>
             </TrackCard.Group>
 
             <TrackCard.Card>
-                <TrackCard.Value>{formatHourNumbers(tracksInfo.total)} hrs</TrackCard.Value>
+                <TrackCard.Value>{workTracksInfo.total} Tbjos</TrackCard.Value>
                 <TrackCard.Label>Total</TrackCard.Label>
             </TrackCard.Card>
         </TrackCard>
     )
 }
 
-export default HomeHourCards
+export default HomeWorkCards

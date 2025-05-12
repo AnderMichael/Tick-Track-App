@@ -13,6 +13,7 @@ interface OptionDropdownProps {
     placeholder: string;
     dropdownHeight?: number;
     disabled?: boolean;
+    isLoading?: boolean;
 }
 
 const OptionDropdown: React.FC<OptionDropdownProps> = ({
@@ -22,12 +23,13 @@ const OptionDropdown: React.FC<OptionDropdownProps> = ({
     placeholder = "Semestre",
     dropdownHeight = 200,
     disabled = false,
+    isLoading = false,
 }) => {
     const [isFocus, setIsFocus] = useState(false);
 
     return (
         <Dropdown
-            disable={disabled}
+            disable={disabled || isLoading}
             autoScroll={false}
             style={[
                 {
@@ -48,7 +50,7 @@ const OptionDropdown: React.FC<OptionDropdownProps> = ({
             value={value}
             onFocus={() => setIsFocus(true)}
             onBlur={() => setIsFocus(false)}
-            placeholder={placeholder}
+            placeholder={isLoading ? 'Cargando' : placeholder}
             itemTextStyle={{
                 fontFamily: 'Outfit_400Regular',
                 fontSize: 16,

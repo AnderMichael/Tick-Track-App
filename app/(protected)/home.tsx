@@ -6,7 +6,7 @@ import { RefreshControl, ScrollView } from "react-native";
 
 const HomeScreen = () => {
     const [refreshing, setRefreshing] = useState(false);
-    const { userRequest, isLoading, error } = useAuth();
+    const { userRequest, isLoading } = useAuth();
     const { login } = useSession();
 
     const onRefresh = useCallback(async () => {

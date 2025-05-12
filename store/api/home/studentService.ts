@@ -1,25 +1,13 @@
 import { environmentVariables } from "@/config";
-import { CommitmentInfo, PaginatedTransactions, TracksInfo } from "@/interfaces/student";
-import { getToken } from "@/utils/auth";
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { CommitmentInfo, TracksInfo } from "@/interfaces/student";
+import { createApi } from "@reduxjs/toolkit/query/react";
+import { baseQueryWithInterceptor } from "../baseQueryWithInterceptor";
 
 const { API_URL } = environmentVariables;
 
 export const studentApi = createApi({
     reducerPath: "studentApi",
-    baseQuery: fetchBaseQuery({
-        baseUrl: `${API_URL}/students`,
-        credentials: "include",
-        prepareHeaders: async (headers) => {
-            headers.set("Accept", "application/json");
-            headers.set("Content-Type", "application/json");
-            const token = await getToken();
-            if (token) {
-                headers.set("Authorization", `Bearer ${token}`);
-            }
-            return headers;
-        },
-    }),
+    baseQuery: baseQueryWithInterceptor(`${API_URL}/students`),
     endpoints: (builder) => ({
         tracksInfo: builder.query<TracksInfo, { upbCode: number, semester_id: number }>({
             query: (params) => ({ url: `/${params.upbCode}/tracks/${params.semester_id}`, method: "GET" }),

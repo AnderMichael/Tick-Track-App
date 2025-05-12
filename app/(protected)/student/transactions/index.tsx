@@ -1,5 +1,4 @@
-import { Screen } from '@/components/common';
-import { TransactionsList } from '@/components/common/lists';
+import { Screen, TransactionsList } from '@/components/common';
 import { useSemester } from '@/context/home';
 import React from 'react';
 import { Text } from 'react-native';
