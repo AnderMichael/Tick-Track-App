@@ -13,9 +13,8 @@ export default function HomeAdministrativeCategories() {
     }
 
     return <>
-        <Screen.Title>Categorías de Información</Screen.Title>
-
         <WithRole allowed={[Role.SUPERVISOR, Role.SCHOLARSHIP_OFFICER, Role.ADMIN]}>
+            <Screen.Title>Categorías de Información</Screen.Title>
             <TouchableOpacity className="bg-black rounded-2xl p-4 h-28" onPress={() => { router.push("/administrative/works") }}>
                 <Text className="text-white font-outfit-medium">Trabajos</Text>
             </TouchableOpacity>

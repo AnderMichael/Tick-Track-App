@@ -1,5 +1,6 @@
 import { environmentVariables } from "@/config";
 import { PaginatedSemesters, PaginatedWorks, Work } from "@/interfaces/administrative";
+import { Payment, StudentPaymentInfo } from "@/interfaces/payments";
 import { PaginatedTransactions, Transaction } from "@/interfaces/student";
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { baseQueryWithInterceptor } from "../baseQueryWithInterceptor";
@@ -33,6 +34,20 @@ export const commonApi = createApi({
                 method: "GET",
             }),
         }),
+        processAccount: builder.mutation<StudentPaymentInfo, { account_key: string }>({
+            query: ({ account_key }) => ({
+                url: `/transactions/process-account`,
+                method: "POST",
+                body: { account_key },
+            }),
+        }),
+        payment: builder.mutation<void, Payment>({
+            query: (body) => ({
+                url: `/transactions`,
+                method: "POST",
+                body,
+            }),
+        }),
         semesterPerYear: builder.query<PaginatedSemesters, { year: number }>({
             query: (params) => ({ url: "/semesters", method: "GET", params: { year: params.year } }),
         }),
@@ -57,4 +72,4 @@ export const commonApi = createApi({
     })
 })
 
-export const { useTransactionsQuery, useTransactionQuery, useSemesterPerYearQuery, useWorksQuery, useWorkQuery } = commonApi;
+export const { useTransactionsQuery, useTransactionQuery, useSemesterPerYearQuery, useWorksQuery, useWorkQuery, useProcessAccountMutation, usePaymentMutation } = commonApi;

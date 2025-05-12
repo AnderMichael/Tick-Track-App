@@ -11,6 +11,14 @@ export default function WorkLayout() {
         headerTransparent: true,
         header: () => <CustomHeader title="Trabajo" />,
       }} />
+      <Stack.Screen name="scanQR" options={{
+        headerTransparent: true,
+        header: () => <CustomHeader title="Escanear QR" />,
+      }} />
+      <Stack.Screen name="payment-form" options={{
+        headerTransparent: true,
+        header: () => <CustomHeader title="Pagar Horas" />,
+      }} />
     </Stack>
   )
 }

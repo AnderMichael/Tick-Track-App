@@ -22,7 +22,7 @@ export default function TransactionDetailScreen() {
 
     const { hours, date, comment_student, comment_administrative, administrative_name, work_name, student_name } = transactionDetails;
 
-    const showNoCommentButton = !comment_student || comment_student.trim().length === 0;
+    const showNoCommentButton = !comment_student || comment_student.trim().length === 0 || comment_student.trim() === '(Sin Comentarios)';
 
     return (
         <Screen>
@@ -72,7 +72,7 @@ export default function TransactionDetailScreen() {
 
                         <Sheet.Field>
                             <Sheet.Value>
-                                Comentarios
+                                Comentarios Supervisor
                             </Sheet.Value>
                         </Sheet.Field>
                         <Sheet.Field>
@@ -80,7 +80,7 @@ export default function TransactionDetailScreen() {
                         </Sheet.Field>
                     </Sheet>
                     {showNoCommentButton && (
-                        <TouchableOpacity className="bg-black rounded-2xl">
+                        <TouchableOpacity className="bg-black py-4 rounded-2xl mt-6">
                             <Text className="text-white text-center font-outfit-medium">Sin Comentarios</Text>
                         </TouchableOpacity>
                     )}

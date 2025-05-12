@@ -65,7 +65,7 @@ export default function WorkDetailScreen() {
                 </Screen.Section>
                 <Screen.Section>
                     <View className="flex-row justify-between">
-                        <TouchableOpacity className="items-center flex-1">
+                        <TouchableOpacity className="items-center flex-1" onPress={() => router.push(`/(protected)/administrative/works/${id}/scanQR`)}>
                             <View className="w-20 h-20 bg-gray-200 rounded-full justify-center items-center mb-2">
                                 <MaterialCommunityIcons name="qrcode-scan" size={30} color="black" />
                             </View>
