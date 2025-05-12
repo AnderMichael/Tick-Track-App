@@ -20,7 +20,7 @@ export default function TransactionDetailScreen() {
     if (isLoading || isFetching) return <ProcessingModal visible={isFetching} />;
     if (isError || !transactionDetails) return <Text>Error</Text>;
 
-    const { hours, date, comment_student, comment_administrative, administrative_name, work_name } = transactionDetails;
+    const { hours, date, comment_student, comment_administrative, administrative_name, work_name, student_name } = transactionDetails;
 
     const showNoCommentButton = !comment_student || comment_student.trim().length === 0;
 
@@ -60,6 +60,14 @@ export default function TransactionDetailScreen() {
 
                         <Sheet.Field>
                             <Sheet.Name>{administrative_name}</Sheet.Name>
+                        </Sheet.Field>
+
+                        <Sheet.Field>
+                            <Sheet.Value>Estudiante</Sheet.Value>
+                        </Sheet.Field>
+
+                        <Sheet.Field>
+                            <Sheet.Name>{student_name}</Sheet.Name>
                         </Sheet.Field>
 
                         <Sheet.Field>

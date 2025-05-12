@@ -5,6 +5,7 @@ export interface Transaction {
     comment_student: string;
     comment_administrative: string;
     administrative_name: string;
+    student_name: string;
     work_name: string;
 }
 

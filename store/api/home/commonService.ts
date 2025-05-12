@@ -12,16 +12,18 @@ export const commonApi = createApi({
     endpoints: (builder) => ({
         transactions: builder.query<
             PaginatedTransactions,
-            { upbCode: number; semester_id: number; page?: number; limit?: number }
+            { student_upb_code?: number; semester_id: number; page?: number; limit?: number, administrative_upb_code?: number, work_id?: number }
         >({
-            query: ({ upbCode, semester_id, page = 1, limit = 10 }) => ({
+            query: ({ student_upb_code, semester_id, page = 1, limit = 10, administrative_upb_code, work_id }) => ({
                 url: `/transactions`,
                 method: "GET",
                 params: {
-                    student_upb_code: upbCode,
+                    student_upb_code,
                     semester_id,
                     page,
                     limit,
+                    administrative_upb_code,
+                    work_id
                 },
             }),
         }),
@@ -34,7 +36,7 @@ export const commonApi = createApi({
         semesterPerYear: builder.query<PaginatedSemesters, { year: number }>({
             query: (params) => ({ url: "/semesters", method: "GET", params: { year: params.year } }),
         }),
-        works: builder.query<PaginatedWorks, { semester_id: number; page?: number; limit?: number, administrative_upb_code: number }>({
+        works: builder.query<PaginatedWorks, { semester_id: number; page?: number; limit?: number, administrative_upb_code?: number, work_id?: number }>({
             query: ({ semester_id, page = 1, limit = 10, administrative_upb_code }) => ({
                 url: `/works`,
                 method: "GET",

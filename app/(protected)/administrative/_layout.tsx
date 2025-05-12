@@ -5,8 +5,7 @@ export default function AdministrativeLayout() {
     return (
         <Stack>
             <Stack.Screen name="works" options={{
-                headerTransparent: true,
-                header: () => <CustomHeader title="Trabajos" />,
+                headerShown: false,
             }} />
         </Stack>
     );

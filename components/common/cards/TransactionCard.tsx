@@ -3,22 +3,29 @@ import { useRouter } from 'expo-router';
 import React from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { SkeletonBox } from '../boxes';
+import { WithRole } from '../containers';
+import { Role } from '@/constants/common/roles';
 
-const TransactionCard = ({ children, isLoading, transaction_id }: { children?: React.ReactNode, isLoading?: boolean, transaction_id?: number }) => {
+const TransactionCard = ({ children, isLoading, transaction_id, work_id }: { children?: React.ReactNode, isLoading?: boolean, transaction_id?: number, work_id?: number }) => {
 
     const router = useRouter();
-
-    const navToTransaction = (id: number) => {
-        router.navigate(`/student/transactions/${id}`);
-    }
 
     if (isLoading || !transaction_id) {
         return <SkeletonBox className={`bg-gray-600 rounded-2xl h-32`} />;
     }
 
-    return <TouchableOpacity className="bg-black rounded-2xl p-5" onPress={() => navToTransaction(transaction_id)}>
-        {children}
-    </TouchableOpacity>
+    return <>
+        <WithRole allowed={[Role.STUDENT]}>
+            <TouchableOpacity className="bg-black rounded-2xl p-5" onPress={() => router.push(`/student/transactions/${transaction_id}`)}>
+                {children}
+            </TouchableOpacity>
+        </WithRole>
+        <WithRole allowed={[Role.SUPERVISOR, Role.SCHOLARSHIP_OFFICER, Role.ADMIN]}>
+            <TouchableOpacity className="bg-black rounded-2xl p-5" onPress={() => router.push(`/administrative/works/${work_id}/transactions/${transaction_id}`)}>
+                {children}
+            </TouchableOpacity>
+        </WithRole>
+    </>
 };
 
 function TransactionCardTitle({ children }: { children: React.ReactNode }) {
