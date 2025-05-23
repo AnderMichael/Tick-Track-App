@@ -48,12 +48,14 @@ const InscriptionsDropdown = () => {
     }
 
     return (
-        <OptionDropdown
-            data={semesters}
-            placeholder="Semestre"
-            onChange={handleChange}
-            value={semester}
-        />
+        <View className='w-full px-5'>
+            <OptionDropdown
+                data={semesters}
+                placeholder="Semestre"
+                onChange={handleChange}
+                value={semester}
+            />
+        </View>
     )
 }
 

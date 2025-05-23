@@ -30,7 +30,7 @@ export function SingleLineInput<T extends FieldValues>({
               onChangeText={onChange}
               onBlur={onBlur}
               inputMode={inputMode}
-              className={`border border-black px-4 py-3 rounded-xl font-outfit-regular ${className}`}
+              className={`border border-black px-4 py-3 rounded-xl font-outfit-light ${className}`}
             />
             {error && (
               <Text className="text-sm text-red-600 mt-1 font-outfit-light">

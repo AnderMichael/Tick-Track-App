@@ -1,20 +1,21 @@
 import { Screen, WorkTransactionsList } from "@/components/common";
-import { useLocalSearchParams } from "expo-router";
+import { useWork } from "@/context/administrative";
 import { Text } from "react-native";
 
 export default function WorkTransactionsScreen() {
-    const { id } = useLocalSearchParams();
+    const { work } = useWork();
+
     return (
         <Screen>
             <Screen.Section>
                 <Screen.SubTitle>
-                    Correspondientes al trabajo
-                    <Text className="text-lg font-outfit-medium" style={{ color: 'black' }}>
-
+                    Correspondientes al trabajo {' '}
+                    <Text className="text-lg font-outfit-semibold" style={{ color: 'black' }}>
+                        "{work!.title}"
                     </Text>
                 </Screen.SubTitle>
             </Screen.Section>
-            <WorkTransactionsList work_id={parseInt(id as string)} />
+            <WorkTransactionsList work_id={work!.id} />
         </Screen>
     )
 }

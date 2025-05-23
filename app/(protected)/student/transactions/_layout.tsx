@@ -5,11 +5,15 @@ export default function StudentTransactionsLayout() {
     return <Stack>
         <Stack.Screen name="index" options={{
             headerTransparent: true,
-            header: () => <CustomHeader title="Transacciones" />,
+            header: () => <CustomHeader>
+                <CustomHeader.Title>Transacciones</CustomHeader.Title>
+            </CustomHeader>,
         }} />
         <Stack.Screen name="[id]" options={{
             headerTransparent: true,
-            header: () => <CustomHeader title="Transacción" />,
+            header: () => <CustomHeader>
+                <CustomHeader.Title>Transacción</CustomHeader.Title>
+            </CustomHeader>,
         }} />
     </Stack>;
 }

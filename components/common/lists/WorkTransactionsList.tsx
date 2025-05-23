@@ -1,6 +1,6 @@
 import { useSemester } from '@/context/home';
 import { formatDate } from '@/helpers/common';
-import { useTransactionsQuery } from '@/store/api/home';
+import { useTransactionsQuery } from '@/store/api/app';
 import React, { useState } from 'react';
 import { FlatList, RefreshControl, Text, View } from 'react-native';
 import { TransactionCard } from '../cards';
@@ -50,7 +50,7 @@ const WorkTransactionsList = ({work_id}: Props) => {
             data={data?.data || []}
             keyExtractor={(item) => item.id.toString()}
             renderItem={renderItem}
-            contentContainerStyle={{ paddingHorizontal: 20 }}
+            contentContainerStyle={{ paddingHorizontal: 20, paddingVertical: 15}}
             refreshControl={
                 <RefreshControl refreshing={isFetching} onRefresh={refetch} />
             }

@@ -6,11 +6,15 @@ export default function StudentLayout() {
         <Stack>
             <Stack.Screen name="qrcode" options={{
                 headerTransparent: true,
-                header: () => <CustomHeader title="Cobrar Horas" />,
+                header: () => <CustomHeader>
+                    <CustomHeader.Title>Cobrar Horas</CustomHeader.Title>
+                </CustomHeader>,
             }} />
             <Stack.Screen name="scholarship" options={{
                 headerTransparent: true,
-                header: () => <CustomHeader title="Sobre Tu Beca" />,
+                header: () => <CustomHeader>
+                    <CustomHeader.Title>Sobre tu Beca</CustomHeader.Title>
+                </CustomHeader>,
             }} />
             <Stack.Screen name="transactions" options={{
                 headerShown: false,

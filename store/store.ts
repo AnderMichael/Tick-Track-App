@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
+import { administrativeApi, semestersApi, studentApi, transactionsApi, worksApi } from "./api/app";
 import { authApi } from "./api/auth";
-import { commonApi, administrativeApi, studentApi } from "./api/home";
 import sessionReducer from "./slices/sessionSlice";
 
 export const store = configureStore({
@@ -9,14 +9,18 @@ export const store = configureStore({
         [authApi.reducerPath]: authApi.reducer,
         [administrativeApi.reducerPath]: administrativeApi.reducer,
         [studentApi.reducerPath]: studentApi.reducer,
-        [commonApi.reducerPath]: commonApi.reducer,
+        [semestersApi.reducerPath]: semestersApi.reducer,
+        [transactionsApi.reducerPath]: transactionsApi.reducer,
+        [worksApi.reducerPath]: worksApi.reducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware()
             .concat(authApi.middleware)
             .concat(administrativeApi.middleware)
-            .concat(commonApi.middleware)
-            .concat(studentApi.middleware),
+            .concat(studentApi.middleware)
+            .concat(semestersApi.middleware)
+            .concat(transactionsApi.middleware)
+            .concat(worksApi.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

@@ -1,7 +1,7 @@
 import { useSemester } from '@/context/home';
 import { formatHourNumbers } from '@/helpers/common';
 import { useSession } from '@/hooks';
-import { useTracksInfoQuery } from '@/store/api/home';
+import { useTracksInfoQuery } from '@/store/api/app';
 import React, { useEffect } from 'react';
 import { Text } from 'react-native';
 import { TrackCard } from '../cards';

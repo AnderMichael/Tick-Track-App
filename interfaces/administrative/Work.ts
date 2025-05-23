@@ -11,6 +11,10 @@ export interface Work {
   description: string
   date_begin: string
   date_end: string
-  administrative_id: number
+  administrative: {
+    upbCode: number;
+    upb_role: string;
+    name: string;
+  }
   semester_id: number
 }

@@ -1,16 +1,16 @@
 import { OptionDropdown } from '@/components/common';
-import { useSemesterPerYearQuery } from '@/store/api/home';
+import { useSemester } from '@/context/home';
+import { useSemesterPerYearQuery } from '@/store/api/app';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import { YearPickerModal } from '../pickers';
-import { useSemester } from '@/context/home';
 
 const AnnualPickerDropdown = () => {
     const today = new Date();
     const [yearSelected, setYearSelected] = useState(today.getFullYear());
     const [isModalVisible, setIsModalVisible] = useState(false);
-    const {semester, setSemester} = useSemester();
+    const { semester, setSemester } = useSemester();
     const { isLoading, isFetching, isError, data: semesters, refetch, error } = useSemesterPerYearQuery({ year: yearSelected });
 
     const semesterOptions = useMemo(() => {
@@ -55,13 +55,15 @@ const AnnualPickerDropdown = () => {
                 </Text>
             </Pressable>
 
-            <OptionDropdown
-                data={semesterOptions}
-                value={semester}
-                onChange={setSemester}
-                placeholder="Sin semestres"
-                isLoading={isLoading || isFetching}
-            />
+            <View className='w-full px-5'>
+                <OptionDropdown
+                    data={semesterOptions}
+                    value={semester}
+                    onChange={setSemester}
+                    placeholder="Sin semestres"
+                    isLoading={isLoading || isFetching}
+                />
+            </View>
             {semesterOptions.length === 0 &&
                 <View className="flex-1 items-center justify-center gap-5">
                     <MaterialCommunityIcons name="credit-card-lock" color="gray" size={100} />

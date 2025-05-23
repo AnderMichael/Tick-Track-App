@@ -1,15 +1,24 @@
 import { ProcessingModal, Screen } from '@/components/common';
+import { useWork } from '@/context/administrative';
 import { formatDate } from '@/helpers/common';
-import { useWorkQuery } from '@/store/api/home';
+import { useWorkQuery } from '@/store/api/app';
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
-import { useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useEffect } from 'react';
 import { RefreshControl, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 
 export default function WorkDetailScreen() {
-    const { id } = useLocalSearchParams();
-    const { data: work, isLoading, isFetching, refetch } = useWorkQuery({ id: id as string });
+    const { id: work_id } = useLocalSearchParams();
+    const { data: work, isLoading, isFetching, refetch } = useWorkQuery({ id: work_id as string });
     const router = useRouter();
+
+    const { setWork } = useWork();
+
+    useEffect(() => {
+        if (work) {
+            setWork(work);
+        }
+    }, [work]);
 
     if (isLoading || isFetching) return <ProcessingModal visible />;
 
@@ -53,19 +62,19 @@ export default function WorkDetailScreen() {
                         </View>
                     </View>
                     {/* Autor */}
-                    <Text className="text-base font-outfit-bold">Autor <Text className="font-outfit-regular">{work!.administrative_id}</Text></Text>
+                    <Text className="text-base font-outfit-bold">Autor <Text className="font-outfit-regular">{work!.administrative.name} - {work!.administrative.upb_role}</Text></Text>
 
                 </Screen.Section>
                 <Screen.Section>
                     <View className="flex-row justify-between">
-                        <TouchableOpacity className="bg-black rounded-2xl p-5 flex-1 h-28" onPress={()=> router.push(`/(protected)/administrative/works/${id}/transactions`)}>
+                        <TouchableOpacity className="bg-black rounded-2xl p-5 flex-1 h-28" onPress={() => router.push(`/(protected)/administrative/works/${work_id}/transactions`)}>
                             <Text className="text-white font-outfit-bold">Transacciones</Text>
                         </TouchableOpacity>
                     </View>
                 </Screen.Section>
                 <Screen.Section>
                     <View className="flex-row justify-between">
-                        <TouchableOpacity className="items-center flex-1" onPress={() => router.push(`/(protected)/administrative/works/${id}/scanQR`)}>
+                        <TouchableOpacity className="items-center flex-1" onPress={() => router.push(`/(protected)/administrative/works/${work_id}/scanQR`)}>
                             <View className="w-20 h-20 bg-gray-200 rounded-full justify-center items-center mb-2">
                                 <MaterialCommunityIcons name="qrcode-scan" size={30} color="black" />
                             </View>

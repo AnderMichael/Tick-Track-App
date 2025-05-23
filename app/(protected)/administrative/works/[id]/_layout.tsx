@@ -9,15 +9,21 @@ export default function WorkLayout() {
       }} />
       <Stack.Screen name="index" options={{
         headerTransparent: true,
-        header: () => <CustomHeader title="Trabajo" />,
+        header: () => <CustomHeader>
+          <CustomHeader.Title>Trabajo</CustomHeader.Title>
+        </CustomHeader>,
       }} />
       <Stack.Screen name="scanQR" options={{
         headerTransparent: true,
-        header: () => <CustomHeader title="Escanear QR" />,
+        header: () => <CustomHeader>
+          <CustomHeader.Title>Escanear QR</CustomHeader.Title>
+        </CustomHeader>,
       }} />
       <Stack.Screen name="payment-form" options={{
         headerTransparent: true,
-        header: () => <CustomHeader title="Pagar Horas" />,
+        header: () => <CustomHeader>
+          <CustomHeader.Title>Pagar QR</CustomHeader.Title>
+        </CustomHeader>,
       }} />
     </Stack>
   )

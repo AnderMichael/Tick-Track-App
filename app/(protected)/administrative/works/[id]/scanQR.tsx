@@ -1,5 +1,5 @@
 import { ProcessingModal } from "@/components/common"; // Importa el modal de carga
-import { useProcessAccountMutation } from "@/store/api/home";
+import { useProcessAccountMutation } from "@/store/api/app";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import { RelativePathString, useLocalSearchParams, useRouter } from "expo-router";
 import React, { useState } from "react";

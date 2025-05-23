@@ -1,6 +1,6 @@
 import { ProcessingModal, Screen, Sheet } from "@/components/common";
 import { useSemester } from "@/context/home";
-import { useCommitmentInfoQuery } from "@/store/api/home";
+import { useCommitmentInfoQuery } from "@/store/api/app";
 import { Text } from "react-native";
 
 export default function ScholarshipScreen() {

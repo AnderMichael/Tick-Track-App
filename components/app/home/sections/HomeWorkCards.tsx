@@ -4,7 +4,7 @@ import { TrackCard } from '../cards';
 import { useSession } from '@/hooks';
 import { useSemester } from '@/context/home';
 import { Text } from 'react-native';
-import { useWorkTracksInfoQuery } from '@/store/api/home';
+import { useWorkTracksInfoQuery } from '@/store/api/app';
 
 const HomeWorkCards = () => {
     const { user } = useSession();
