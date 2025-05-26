@@ -17,8 +17,7 @@ export default function PayHoursScreen() {
     const { work } = useWork();
 
     const { fullName, upbCode, commitment_id } = useLocalSearchParams();
-    const [loading, setLoading] = useState(false);
-    const [payment] = usePaymentMutation();
+    const [payment, {isLoading}] = usePaymentMutation();
     const router = useRouter();
 
     const {
@@ -35,12 +34,11 @@ export default function PayHoursScreen() {
 
     const handlePayment = async (data: TransactionForm) => {
         console.log(data);
+        const {comment, hours} = data;
         try {
-            setLoading(true);
             await payment({
-                hours: data.hours,
-                comment_administrative: data.comment,
-                comment_student: '(Sin Comentarios)',
+                hours: hours,
+                comment_administrative: comment ? comment : '(Sin Comentarios)',
                 commitment_id: parseInt(commitment_id as string),
                 work_id: work_id,
                 date: new Date().toISOString(),
@@ -51,8 +49,6 @@ export default function PayHoursScreen() {
             console.error(error);
             ToastAndroid.show('Error al registrar el pago', ToastAndroid.LONG);
             router.back();
-        } finally {
-            setLoading(false);
         }
     };
 
@@ -78,7 +74,7 @@ export default function PayHoursScreen() {
                     </Button>
                 </View>
             </ScrollView>
-            <ProcessingModal visible={loading} />
+            <ProcessingModal visible={isLoading} />
         </Screen>
     );
 }

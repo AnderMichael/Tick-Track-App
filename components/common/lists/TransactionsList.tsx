@@ -46,7 +46,7 @@ const TransactionsList = () => {
             data={data?.data || []}
             keyExtractor={(item) => item.id.toString()}
             renderItem={renderItem}
-            contentContainerStyle={{ paddingHorizontal: 20}}
+            contentContainerStyle={{ paddingHorizontal: 20, paddingVertical: 15 }}
             refreshControl={
                 <RefreshControl refreshing={isFetching} onRefresh={refetch} />
             }

@@ -8,8 +8,8 @@ export interface StudentPaymentInfo {
 export interface Payment {
     date: string;
     hours: number;
-    comment_student: string;
-    comment_administrative: string;
+    // comment_student: string;
+    comment_administrative?: string;
     work_id: number;
     commitment_id: number;
 }

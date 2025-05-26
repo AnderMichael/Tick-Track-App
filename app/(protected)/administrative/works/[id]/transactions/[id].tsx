@@ -23,7 +23,7 @@ export default function TransactionDetailScreen() {
 
     const { hours, date, comment_student, comment_administrative, administrative_name, work_name, student_name } = transactionDetails;
 
-    const showNoCommentButton = !comment_student || comment_student.trim().length === 0;
+    const showNoCommentButton = !comment_student;
 
     return (
         <Screen>
@@ -80,11 +80,13 @@ export default function TransactionDetailScreen() {
                             <Sheet.Name>{comment_administrative}</Sheet.Name>
                         </Sheet.Field>
                     </Sheet>
-                    {showNoCommentButton && (
-                        <TouchableOpacity className="bg-black rounded-2xl">
-                            <Text className="text-white text-center font-outfit-medium">Sin Comentarios</Text>
-                        </TouchableOpacity>
-                    )}
+                    <WithRole allowed={[Role.STUDENT]}>
+                        {showNoCommentButton && (
+                            <TouchableOpacity className="bg-black rounded-2xl">
+                                <Text className="text-white text-center font-outfit-medium">Sin Comentarios</Text>
+                            </TouchableOpacity>
+                        )}
+                    </WithRole>
 
                     <WithRole allowed={[Role.STUDENT]}>
                         <Text className="text-xl font-outfit-bold">Tus Comentarios</Text>
@@ -93,25 +95,44 @@ export default function TransactionDetailScreen() {
                         <Text className="text-xl font-outfit-bold">Comentarios Estudiante</Text>
                     </WithRole>
 
-                    <TextInput
-                        className="border border-black rounded-2xl px-4 text-base font-outfit-light h-52"
-                        placeholder="¿Qué te pareció el trabajo? (Opcional)"
-                        placeholderTextColor="gray"
-                        multiline
-                        numberOfLines={5}
-                        maxLength={500}
-                        value={comment}
-                        onChangeText={setComment}
-                        textAlignVertical="top"
-                        editable={showNoCommentButton}
+                    <WithRole allowed={[Role.STUDENT]}>
+                        <TextInput
+                            className="border border-black rounded-2xl px-4 text-base font-outfit-light h-52"
+                            placeholder="¿Qué te pareció el trabajo? (Opcional)"
+                            placeholderTextColor="gray"
+                            multiline
+                            numberOfLines={5}
+                            maxLength={500}
+                            value={comment}
+                            onChangeText={setComment}
+                            textAlignVertical="top"
+                            editable={showNoCommentButton}
 
-                    />
+                        />
+                    </WithRole>
 
-                    {showNoCommentButton && (
-                        <TouchableOpacity className="bg-black py-4 rounded-2xl mt-6">
-                            <Text className="text-white text-center font-outfit-medium">Enviar</Text>
-                        </TouchableOpacity>
-                    )}
+                    <WithRole allowed={[Role.ADMIN, Role.SCHOLARSHIP_OFFICER, Role.SUPERVISOR]}>
+                        <TextInput
+                            className="border border-black rounded-2xl px-4 text-base font-outfit-light h-52"
+                            placeholder="Sin comentarios aún."
+                            placeholderTextColor="gray"
+                            multiline
+                            numberOfLines={5}
+                            maxLength={500}
+                            value={comment}
+                            onChangeText={setComment}
+                            textAlignVertical="top"
+                            editable={false}
+                        />
+                    </WithRole>
+
+                    <WithRole allowed={[Role.STUDENT]}>
+                        {showNoCommentButton && (
+                            <TouchableOpacity className="bg-black py-4 rounded-2xl mt-6" disabled={!comment || comment.length <5}>
+                                <Text className="text-white text-center font-outfit-medium">Enviar</Text>
+                            </TouchableOpacity>
+                        )}
+                    </WithRole>
                 </Screen.Section>
             </ScrollView>
         </Screen>

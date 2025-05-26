@@ -33,6 +33,12 @@ export const transactionsApi = createApi({
                 method: "GET",
             }),
         }),
+        removeTransaction: builder.mutation<void, { transaction_id: string }>({
+            query: ({ transaction_id }) => ({
+                url: `/${transaction_id}`,
+                method: "DELETE",
+            }),
+        }),
         processAccount: builder.mutation<StudentPaymentInfo, { account_key: string }>({
             query: ({ account_key }) => ({
                 url: `/process-account`,
@@ -47,7 +53,14 @@ export const transactionsApi = createApi({
                 body,
             }),
         }),
+        studentComment: builder.mutation<void, { transaction_id: string; comment: string }>({
+            query: ({ transaction_id, comment }) => ({
+                url: `/${transaction_id}/comment`,
+                method: "PATCH",
+                body: { comment },
+            }),
+        }),
     }),
 })
 
-export const { useTransactionsQuery, useTransactionQuery, usePaymentMutation, useProcessAccountMutation } = transactionsApi;
+export const { useTransactionsQuery, useTransactionQuery, usePaymentMutation, useProcessAccountMutation, useStudentCommentMutation } = transactionsApi;

@@ -1,9 +1,9 @@
-import { ProcessingModal, Screen, Sheet } from "@/components/common";
+import { Button, ProcessingModal, Screen, Sheet } from "@/components/common";
 import { formatDate, formatHourNumbers } from "@/helpers/common";
-import { useTransactionQuery } from "@/store/api/app";
+import { useStudentCommentMutation, useTransactionQuery } from "@/store/api/app";
 import { useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { RefreshControl, ScrollView, Text, TextInput, TouchableOpacity } from "react-native";
+import { RefreshControl, ScrollView, Text, TextInput } from "react-native";
 
 export default function TransactionDetailScreen() {
     const { id } = useLocalSearchParams();
@@ -17,13 +17,38 @@ export default function TransactionDetailScreen() {
         }
     }, [transactionDetails])
 
-    if (isLoading || isFetching) return <ProcessingModal visible={isFetching} />;
-    if (isError || !transactionDetails) return <Text>Error</Text>;
+    const [publishComment, { isLoading: isPublishLoading, isError: isPublishError }] = useStudentCommentMutation();
+
+    if (isLoading || isFetching || isPublishLoading) return <ProcessingModal visible={isLoading || isFetching || isPublishLoading} />;
+    if (isError || isPublishError || !transactionDetails) return <Text>Error</Text>;
 
     const { hours, date, comment_student, comment_administrative, administrative_name, work_name, student_name } = transactionDetails;
 
-    const showNoCommentButton = !comment_student || comment_student.trim().length === 0 || comment_student.trim() === '(Sin Comentarios)';
+    const showNoCommentButton = !comment_student;
 
+    const handleWithoutComment = async () => {
+        try {
+            await publishComment({
+                transaction_id: id as string,
+                comment: '(Sin Comentarios)',
+            }).unwrap();
+            setComment('(Sin Comentarios)');
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    const handleCommentSubmit = async () => {
+        if (!comment || comment.length < 5) return;
+        try {
+            await publishComment({
+                transaction_id: id as string,
+                comment: comment.trim(),
+            }).unwrap();
+        } catch (error) {
+            console.error(error);
+        }
+    };
     return (
         <Screen>
             <ScrollView
@@ -80,9 +105,9 @@ export default function TransactionDetailScreen() {
                         </Sheet.Field>
                     </Sheet>
                     {showNoCommentButton && (
-                        <TouchableOpacity className="bg-black py-4 rounded-2xl mt-6">
-                            <Text className="text-white text-center font-outfit-medium">Sin Comentarios</Text>
-                        </TouchableOpacity>
+                        <Button onPress={handleWithoutComment}>
+                            Sin Comentarios
+                        </Button>
                     )}
 
                     <Text className="text-xl font-outfit-bold">Tus Comentarios</Text>
@@ -101,9 +126,12 @@ export default function TransactionDetailScreen() {
                     />
 
                     {showNoCommentButton && (
-                        <TouchableOpacity className="bg-black py-4 rounded-2xl mt-6">
-                            <Text className="text-white text-center font-outfit-medium">Enviar</Text>
-                        </TouchableOpacity>
+                        <Button onPress={handleCommentSubmit} disabled={!comment || comment.length < 5}>
+                            Enviar
+                        </Button>
+                        // <TouchableOpacity className="bg-black py-4 rounded-2xl" disabled={!comment || comment.length < 5}>
+                        //     <Text className="text-white text-center font-outfit-medium">Enviar</Text>
+                        // </TouchableOpacity>
                     )}
                 </Screen.Section>
             </ScrollView>
