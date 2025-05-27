@@ -1,6 +1,6 @@
 import { formatDate } from '@/helpers/common';
 import { Feather } from '@expo/vector-icons';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 import {
     Modal,
@@ -46,6 +46,17 @@ export default function DateRangePicker<T extends FieldValues>({
                 control={control}
                 name={name}
                 render={({ field: { value, onChange }, fieldState: { error } }) => {
+
+                    useEffect(() => {
+                        if (value && value.startDate && value.endDate) {
+                            setRange({
+                                startDate: value.startDate,
+                                endDate: value.endDate,
+                            });
+                        } else {
+                            setRange({ startDate: undefined, endDate: undefined });
+                        }
+                    }, [value]);
 
                     const handleRangeChange = ({ startDate: startDateChanged, endDate: endDateChanged }: DateRange) => {
                         setRange({ startDate: startDateChanged, endDate: endDateChanged });
@@ -129,6 +140,7 @@ export default function DateRangePicker<T extends FieldValues>({
                                             year_selector_label: 'font-outfit-medium',
                                             active_year_label: 'font-outfit-medium',
                                             year_label: 'font-outfit-light',
+                                            outside_label: 'text-gray-200 font-outfit-light',
                                         }}
                                     />
                                 </View>

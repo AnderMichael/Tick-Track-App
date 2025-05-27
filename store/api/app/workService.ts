@@ -36,7 +36,20 @@ export const worksApi = createApi({
                 body,
             }),
         }),
+        editWork: builder.mutation<{ message: string }, { id: string; body: Partial<CreateWork> }>({
+            query: ({ id, body }) => ({
+                url: `/${id}`,
+                method: "PATCH",
+                body,
+            }),
+        }),
+        deleteWork: builder.mutation<{ message: string }, { id: string }>({
+            query: ({ id }) => ({
+                url: `/${id}`,
+                method: "DELETE",
+            }),
+        }),
     })
 })
 
-export const { useWorksQuery, useWorkQuery, useCreateWorkMutation } = worksApi;
+export const { useWorksQuery, useWorkQuery, useCreateWorkMutation, useEditWorkMutation } = worksApi;
