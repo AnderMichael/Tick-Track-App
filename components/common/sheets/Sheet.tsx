@@ -12,7 +12,7 @@ function SheetTitle({ icon = "hourglass-outline", children }: { icon?: any; chil
             <View className='flex items-center justify-center mb-5'>
                 <SandglassIcon />
             </View>
-            <Text className="text-xl font-outfit-semibold mb-6">{children}</Text>
+            <Text className="text-xl font-outfit-semibold mb-6 text-center">{children}</Text>
         </>
     );
 }
