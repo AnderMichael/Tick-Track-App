@@ -1,4 +1,3 @@
-import { CustomHeader } from "@/components/common";
 import { Stack } from "expo-router";
 
 export default function AdministrativeLayout() {

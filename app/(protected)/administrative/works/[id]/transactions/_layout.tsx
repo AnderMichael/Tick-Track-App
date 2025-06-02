@@ -1,14 +1,13 @@
 import { CustomHeader } from "@/components/common";
-import { TransactionStateProvider } from "@/context/administrative";
-import { useStateOperation } from "@/hooks";
+import { TransactionOperationFlowProvider } from "@/context/administrative";
+import { useOperationFlows } from "@/hooks";
 import { Ionicons } from "@expo/vector-icons";
 import { Stack } from "expo-router";
 
 export default function WorkTransactionsLayout() {
-    const transactionOperations = useStateOperation();
-
+    const transactionOperations = useOperationFlows();
     return (
-        <TransactionStateProvider {...transactionOperations}>
+        <TransactionOperationFlowProvider {...transactionOperations}>
             <Stack>
                 <Stack.Screen name="[id]" options={{
                     headerTransparent: true,
@@ -24,6 +23,6 @@ export default function WorkTransactionsLayout() {
                     </CustomHeader>,
                 }} />
             </Stack>
-        </TransactionStateProvider>
+        </TransactionOperationFlowProvider>
     );
 }

@@ -5,7 +5,7 @@ import { baseQueryWithInterceptor } from "../baseQueryWithInterceptor";
 
 const { API_URL } = environmentVariables;
 
-type CreateWork = Omit<Work, "administrative" | "id">;
+export type CreateWork = Omit<Work, "administrative" | "id">;
 
 export const worksApi = createApi({
     reducerPath: "worksApi",
@@ -23,7 +23,7 @@ export const worksApi = createApi({
                 },
             }),
         }),
-        work: builder.query<Work, { id: string }>({
+        work: builder.query<Work, { id: number }>({
             query: ({ id }) => ({
                 url: `/${id}`,
                 method: "GET",
@@ -36,14 +36,14 @@ export const worksApi = createApi({
                 body,
             }),
         }),
-        editWork: builder.mutation<{ message: string }, { id: string; body: Partial<CreateWork> }>({
+        editWork: builder.mutation<{ message: string }, { id: number; body: Partial<CreateWork> }>({
             query: ({ id, body }) => ({
                 url: `/${id}`,
                 method: "PATCH",
                 body,
             }),
         }),
-        deleteWork: builder.mutation<{ message: string }, { id: string }>({
+        deleteWork: builder.mutation<{ message: string }, { id: number }>({
             query: ({ id }) => ({
                 url: `/${id}`,
                 method: "DELETE",
@@ -52,4 +52,4 @@ export const worksApi = createApi({
     })
 })
 
-export const { useWorksQuery, useWorkQuery, useCreateWorkMutation, useEditWorkMutation } = worksApi;
+export const { useWorksQuery, useWorkQuery, useCreateWorkMutation, useEditWorkMutation, useDeleteWorkMutation } = worksApi;

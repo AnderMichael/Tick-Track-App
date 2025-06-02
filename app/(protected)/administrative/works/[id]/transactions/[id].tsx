@@ -1,16 +1,24 @@
 import { ConfirmationModal, ProcessingModal, Screen, Sheet, WithRole } from "@/components/common";
 import { Role } from "@/constants/common/roles";
-import { useTransactionState } from "@/context/administrative";
+import { useTransactionOperationFlow } from "@/context/administrative";
 import { formatDate, formatHourNumbers } from "@/helpers/common";
-import { useTransactionQuery } from "@/store/api/app";
-import { useLocalSearchParams } from "expo-router";
+import { useTransaction } from "@/hooks/app";
+import { router, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { RefreshControl, ScrollView, Text, TextInput, TouchableOpacity } from "react-native";
 
 export default function TransactionDetailScreen() {
     const { id } = useLocalSearchParams();
-    const { showDeleteModal, cancelDeleteModal } = useTransactionState();
-    const { isLoading, isError, data: transactionDetails, refetch, isFetching } = useTransactionQuery({ transaction_id: id as string })
+    const { showDeleteModal, cancelDeleteModal, activateReload } = useTransactionOperationFlow();
+
+    const {
+        isLoadingQuery,
+        isErrorQuery,
+        transactionDetails,
+        refetch,
+        deleteTransaction,
+        isLoadingDeletion
+    } = useTransaction(id as string);
 
     const [comment, setComment] = useState<string | undefined>();
 
@@ -20,10 +28,29 @@ export default function TransactionDetailScreen() {
         }
     }, [transactionDetails])
 
-    if (isLoading || isFetching) return <ProcessingModal visible={isFetching} />;
-    if (isError || !transactionDetails) return <Text>Error</Text>;
+    if (isLoadingQuery || isLoadingDeletion) return <ProcessingModal visible/>;
+    if (isErrorQuery || !transactionDetails) return <Text>Error</Text>;
 
-    const { hours, date, comment_student, comment_administrative, administrative_name, work_name, student_name } = transactionDetails;
+    const {
+        hours,
+        date,
+        comment_student,
+        comment_administrative,
+        administrative_name,
+        work_name,
+        student_name
+    } = transactionDetails;
+
+    async function handleDeleteTransaction() {
+        try {
+            await deleteTransaction();
+            activateReload();
+            cancelDeleteModal();
+            router.back();
+        } catch (error) {
+            console.error('Error al eliminar la transacción:', error);
+        }
+    }
 
     const showNoCommentButton = !comment_student;
 
@@ -35,13 +62,13 @@ export default function TransactionDetailScreen() {
                 message="¿Estás seguro de que deseas eliminar esta transacción? Esta acción no se puede deshacer."
                 confirmText="Eliminar"
                 cancelText="Cancelar"
-                onConfirm={() => { }}
+                onConfirm={handleDeleteTransaction}
                 onCancel={cancelDeleteModal}
             />
             <Screen>
                 <ScrollView
                     contentContainerStyle={{ paddingBottom: 20 }}
-                    refreshControl={<RefreshControl refreshing={isFetching} onRefresh={refetch} />}
+                    refreshControl={<RefreshControl refreshing={isLoadingQuery} onRefresh={refetch} />}
                 >
                     <Screen.Section>
                         <Sheet>

@@ -4,21 +4,21 @@ import React from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { SkeletonBox } from '../boxes';
 
-const WorkCard = ({ children, isLoading, transaction_id }: { children?: React.ReactNode, isLoading?: boolean, transaction_id?: number }) => {
+const WorkCard = ({ children, isLoading, work_id }: { children?: React.ReactNode, isLoading?: boolean, work_id?: number }) => {
   const router = useRouter();
 
   const navToTransaction = (id: number) => {
     router.navigate(`/administrative/works/${id}`);
   };
 
-  if (isLoading || !transaction_id) {
+  if (isLoading || !work_id) {
     return <SkeletonBox className={`bg-gray-600 rounded-2xl h-32`} />;
   }
 
   return (
     <TouchableOpacity
       className="bg-black rounded-2xl p-5"
-      onPress={() => navToTransaction(transaction_id)}
+      onPress={() => navToTransaction(work_id)}
     >
       {children}
     </TouchableOpacity>

@@ -1,39 +1,29 @@
-import { useSemester } from '@/context/home';
 import { formatDate } from '@/helpers/common';
-import { useSession } from '@/hooks';
-import { useTransactionsQuery, useWorksQuery } from '@/store/api/app';
-import React, { useState } from 'react';
-import { FlatList, RefreshControl, Text, View } from 'react-native';
-import { Screen } from '../containers';
+import { Work } from '@/interfaces/administrative';
+import React, { useCallback } from 'react';
+import { FlatList, ListRenderItem, RefreshControl, Text, View } from 'react-native';
 import WorkCard from '../cards/WorkCard';
+import { Screen } from '../containers';
 
-const WorkList = () => {
-  const { semester } = useSemester();
-  const { user } = useSession();
-  const [page, setPage] = useState(1);
-  const limit = 10;
+interface Props {
+  works: Work[];
+  isLoading?: boolean;
+  refetch?: () => void;
+}
 
-  const {
-    data: worksList,
-    isFetching,
-    isLoading,
-    refetch,
-  } = useWorksQuery({
-    administrative_upb_code: user!.upbCode,
-    semester_id: semester!.value,
-    page,
-    limit,
-  });
+const WorkList = ({ works, isLoading = false, refetch }: Props) => {
 
-  const renderItem = ({ item }: any) => (
-    <WorkCard transaction_id={item.id}>
-      <WorkCard.Title>{item.title}</WorkCard.Title>
-      <WorkCard.Date date={formatDate(item.date_begin)} />
-      <WorkCard.Id id={`TRB-${item.id}`} />
-    </WorkCard>
+  const renderItem: ListRenderItem<Work> = useCallback(
+    ({ item: work }) => (
+      <WorkCard work_id={work.id}>
+        <WorkCard.Title>{work.title}</WorkCard.Title>
+        <WorkCard.Date date={formatDate(work.date_begin)} />
+        <WorkCard.Id id={`TRB-${work.id}`} />
+      </WorkCard>
+    ), []
   );
 
-  if (isFetching || isLoading) {
+  if (isLoading) {
     return (
       <Screen.Section>
         <WorkCard isLoading />
@@ -47,11 +37,11 @@ const WorkList = () => {
 
   return (
     <FlatList
-      data={worksList?.data || []}
+      data={works}
       keyExtractor={(item) => item.id.toString()}
       renderItem={renderItem}
       contentContainerStyle={{ paddingHorizontal: 20 }}
-      refreshControl={<RefreshControl refreshing={isFetching} onRefresh={refetch} />}
+      refreshControl={<RefreshControl refreshing={isLoading} onRefresh={refetch} />}
       ItemSeparatorComponent={() => <View className="h-4" />}
       ListEmptyComponent={
         <Text className="text-center text-2xl font-outfit-extralight">

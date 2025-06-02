@@ -1,4 +1,4 @@
-import { Modal, Pressable, Text, View } from "react-native";
+import { Modal, Text, TouchableOpacity, View } from "react-native";
 
 interface ConfirmationModalProps {
     visible: boolean;
@@ -7,7 +7,7 @@ interface ConfirmationModalProps {
     cancelText?: string;
     confirmText?: string;
     onCancel: () => void;
-    onConfirm: () => void;
+    onConfirm: () => void | Promise<void>;
     icon?: string;
 }
 
@@ -31,22 +31,22 @@ export default function ConfirmationModal({
                         {message}
                     </Text>
                     <View className="flex-row justify-between w-full gap-4">
-                        <Pressable
+                        <TouchableOpacity
                             onPress={onCancel}
                             className="flex-1 border border-black py-3 rounded-xl"
                         >
                             <Text className="text-black text-center font-outfit-medium">
                                 {cancelText}
                             </Text>
-                        </Pressable>
-                        <Pressable
+                        </TouchableOpacity>
+                        <TouchableOpacity
                             onPress={onConfirm}
                             className="flex-1 bg-black py-3 rounded-xl"
                         >
                             <Text className="text-white text-center font-outfit-medium">
                                 {confirmText}
                             </Text>
-                        </Pressable>
+                        </TouchableOpacity>
                     </View>
                 </View>
             </View>

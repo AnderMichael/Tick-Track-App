@@ -1,9 +1,39 @@
 import { Screen, WorkTransactionsList } from "@/components/common";
-import { useWork } from "@/context/administrative";
+import { useCurrentWork, useTransactionOperationFlow } from "@/context/administrative";
+import { useSemester } from "@/context/home";
+import { useOperationFlows, useSession } from "@/hooks";
+import { useTransactions } from "@/hooks/app";
+import { useFocusEffect, useLocalSearchParams } from "expo-router";
+import { useCallback } from "react";
 import { Text } from "react-native";
 
 export default function WorkTransactionsScreen() {
-    const { work } = useWork();
+    const { id: work_id } = useLocalSearchParams();
+    const { reload, deactivateReload } = useTransactionOperationFlow();
+    const { user } = useSession();
+    const { semester } = useSemester();
+
+    const {
+        transactions,
+        refetch,
+        isFetching,
+        isLoading
+    } = useTransactions({
+        work_id: parseInt(work_id as string),
+        administrative_upb_code: user!.upbCode,
+        semester_id: semester!.value
+    });
+
+    const { work } = useCurrentWork();
+
+    useFocusEffect(
+        useCallback(() => {
+            if (reload) {
+                refetch();
+                deactivateReload();
+            }
+        }, [reload])
+    );
 
     return (
         <Screen>
@@ -15,7 +45,11 @@ export default function WorkTransactionsScreen() {
                     </Text>
                 </Screen.SubTitle>
             </Screen.Section>
-            <WorkTransactionsList work_id={work!.id} />
+            <WorkTransactionsList
+                transactions={transactions}
+                isLoading={isFetching || isLoading}
+                refetch={refetch}
+            />
         </Screen>
     )
 }

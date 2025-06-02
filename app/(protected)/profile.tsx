@@ -4,17 +4,14 @@ import { roleDefinition } from "@/helpers/common/roleDefinition";
 import { useSession } from "@/hooks";
 import { deleteToken } from "@/utils/auth";
 import { Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
 import { ScrollView, Text, View } from "react-native";
 
 const ProfileScreen = () => {
-    const router = useRouter();
     const { user, logout } = useSession();
 
     const handleLogout = async () => {
         await deleteToken();
         logout();
-        router.replace("/auth/welcome");
     };
 
     return (

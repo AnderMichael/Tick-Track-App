@@ -1,7 +1,8 @@
 import { useState } from "react";
 
-export function useStateOperation() {
+export function useOperationFlows() {
     const [reload, setReload] = useState(false);
+    const [reloadList, setReloadList] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
 
     const activateReload = () => {
@@ -10,6 +11,14 @@ export function useStateOperation() {
 
     const deactivateReload = () => {
         setReload(false);
+    }
+
+    const activateReloadList = () => {
+        setReloadList(true);
+    }
+
+    const deactivateReloadList = () => {
+        setReloadList(false);
     }
 
     const cancelDeleteModal = () => {
@@ -27,5 +36,8 @@ export function useStateOperation() {
         reload,
         activateReload,
         deactivateReload,
+        reloadList,
+        activateReloadList,
+        deactivateReloadList
     };
 }

@@ -1,7 +1,7 @@
 import { ConfirmationModal, ProcessingModal, Screen } from '@/components/common';
-import { useWork, useWorkState } from '@/context/administrative';
+import { useCurrentWork, useWorkOperationFlow } from '@/context/administrative';
 import { formatDate } from '@/helpers/common';
-import { useWorkQuery } from '@/store/api/app';
+import { useWork } from '@/hooks/app';
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
 import { useCallback, useEffect } from 'react';
@@ -9,11 +9,25 @@ import { RefreshControl, ScrollView, Text, TouchableOpacity, View } from 'react-
 
 export default function WorkDetailScreen() {
     const { id: work_id } = useLocalSearchParams();
-    const { showDeleteModal, openDeleteModal, cancelDeleteModal, reload, deactivateReload } = useWorkState();
-    const { data: work, isLoading, isFetching, refetch } = useWorkQuery({ id: work_id as string });
     const router = useRouter();
+    const {
+        showDeleteModal,
+        openDeleteModal,
+        cancelDeleteModal,
+        reload,
+        deactivateReload,
+        activateReloadList
+    } = useWorkOperationFlow();
 
-    const { setWork } = useWork();
+    const {
+        work,
+        isLoading,
+        refetch,
+        removeWork,
+        isLoadingDeletion
+    } = useWork({ work_id: parseInt(work_id as string) });
+
+    const { setWork } = useCurrentWork();
 
     useEffect(() => {
         if (work) {
@@ -30,7 +44,18 @@ export default function WorkDetailScreen() {
         }, [reload])
     );
 
-    if (isLoading || isFetching) return <ProcessingModal visible />;
+    async function handleDeleteWork() {
+        try {
+            await removeWork();
+            cancelDeleteModal();
+            activateReloadList();
+            router.back();
+        } catch (error) {
+            console.error('Error al eliminar el trabajo:', error);
+        }
+    }
+
+    if (isLoading || isLoadingDeletion) return <ProcessingModal visible />;
 
     return (
         <>
@@ -40,7 +65,7 @@ export default function WorkDetailScreen() {
                 message="¿Estás seguro de que deseas eliminar este trabajo? Esta acción no se puede deshacer."
                 confirmText="Eliminar"
                 cancelText="Cancelar"
-                onConfirm={() => { }}
+                onConfirm={handleDeleteWork}
                 onCancel={() => {
                     cancelDeleteModal();
                 }}
@@ -48,7 +73,7 @@ export default function WorkDetailScreen() {
             <Screen>
                 <ScrollView
                     contentContainerStyle={{ paddingVertical: 20, gap: 35 }}
-                    refreshControl={<RefreshControl refreshing={isFetching} onRefresh={refetch} />}
+                    refreshControl={<RefreshControl refreshing={isLoading} onRefresh={refetch} />}
                 >
                     <Screen.Section>
                         <View className="flex-row justify-between items-center">
@@ -60,8 +85,8 @@ export default function WorkDetailScreen() {
                                 <TouchableOpacity className="bg-gray-200 rounded-full p-3" onPress={() => router.push(`/(protected)/administrative/works/${work_id}/edit`)}>
                                     <MaterialIcons name="edit" size={20} color="black" />
                                 </TouchableOpacity>
-                                <TouchableOpacity className="bg-gray-200 rounded-full p-3">
-                                    <MaterialIcons name="delete" size={20} color="black" onPress={openDeleteModal} />
+                                <TouchableOpacity className="bg-gray-200 rounded-full p-3" onPress={openDeleteModal}>
+                                    <MaterialIcons name="delete" size={20} color="black" />
                                 </TouchableOpacity>
                             </View>
                         </View>

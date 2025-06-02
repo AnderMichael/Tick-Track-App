@@ -1,10 +1,10 @@
 import { WorkForm } from '@/components/app/administrative';
 import { Button, ErrorModal, ProcessingModal, Screen } from '@/components/common';
-import { useWorkState } from '@/context/administrative';
+import { useOperationFlow, useWorkOperationFlow } from '@/context/administrative';
 import { useSemester } from '@/context/home';
 import { workCreationSchema } from '@/forms/administrative/works';
 import { parseAPIError } from '@/helpers/common';
-import { useEditWorkMutation, useWorkQuery } from '@/store/api/app';
+import { useWork } from '@/hooks/app';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useState } from 'react';
@@ -16,12 +16,21 @@ type WorkCreationForm = yup.InferType<typeof workCreationSchema>
 
 const EditFormScreen = () => {
   const { id: work_id } = useLocalSearchParams();
-  const { semester } = useSemester();
   const router = useRouter();
-  const { activateReload } = useWorkState();
-  const { data: work, isLoading: isLoadingFetching, error: errorFetching } = useWorkQuery({ id: work_id as string });
 
-  const [editWork, { isLoading: isLoadingEdition, error: errorEditing }] = useEditWorkMutation();
+  const { semester } = useSemester();
+  const { activateReload, activateReloadList } = useWorkOperationFlow();
+
+  const {
+    work,
+    editWork,
+    isLoading,
+    isLoadingUpdate,
+    errorUpdate,
+    errorFetching
+  } = useWork({
+    work_id: parseInt(work_id as string)
+  });
 
   const [errorVisible, setErrorVisible] = useState(false);
 
@@ -43,34 +52,30 @@ const EditFormScreen = () => {
 
   const handleEdition = async (data: WorkCreationForm) => {
     try {
-      const { error: errorEditing } = await editWork({
-        id: work_id as string,
-        body: {
-          title: data.title,
-          description: data.description,
-          date_begin: data.workDates.startDate.toISOString(),
-          date_end: data.workDates.endDate.toISOString(),
-          semester_id: semester!.value,
-        },
+      await editWork({
+        title: data.title,
+        description: data.description,
+        date_begin: data.workDates.startDate.toISOString(),
+        date_end: data.workDates.endDate.toISOString(),
+        semester_id: semester!.value,
       });
-
-      if (errorEditing) {
-        throw errorEditing;
-      }
-
       activateReload();
+      activateReloadList();
       router.back();
     } catch (error) {
       setErrorVisible(true);
-      console.error(error);
     }
   }
 
 
   return (
     <Screen>
-      <ErrorModal visible={errorVisible} onClose={() => setErrorVisible(false)} message={parseAPIError(errorFetching || errorEditing, "No se pudo obetener la información del trabajo.")} />
-      <ProcessingModal visible={isLoadingFetching || isLoadingEdition} />
+      <ErrorModal
+        visible={errorVisible}
+        onClose={() => setErrorVisible(false)}
+        message={parseAPIError(errorFetching || errorUpdate, "No se pudo obetener la información del trabajo.")}
+      />
+      <ProcessingModal visible={isLoading || isLoadingUpdate} />
       <WorkForm control={control} />
       <View className='px-5 my-5'>
         <Button onPress={handleSubmit(handleEdition)}>

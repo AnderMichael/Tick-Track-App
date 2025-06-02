@@ -63,4 +63,4 @@ export const transactionsApi = createApi({
     }),
 })
 
-export const { useTransactionsQuery, useTransactionQuery, usePaymentMutation, useProcessAccountMutation, useStudentCommentMutation } = transactionsApi;
+export const { useTransactionsQuery, useTransactionQuery, usePaymentMutation, useProcessAccountMutation, useStudentCommentMutation, useRemoveTransactionMutation } = transactionsApi;

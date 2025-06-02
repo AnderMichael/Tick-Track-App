@@ -6,9 +6,10 @@ import { Pressable, Text, TouchableOpacity, View } from 'react-native';
 interface CustomHeaderRootProps {
     children: React.ReactNode;
     showBack?: boolean;
+    color?: string;
 }
 
-const CustomHeaderRoot = ({ children, showBack = true }: CustomHeaderRootProps) => {
+const CustomHeaderRoot = ({ children, showBack = true, color = "black" }: CustomHeaderRootProps) => {
     const router = useRouter();
 
     return (
@@ -16,7 +17,7 @@ const CustomHeaderRoot = ({ children, showBack = true }: CustomHeaderRootProps) 
             <View className="flex-row items-center gap-4 flex-1">
                 {showBack && (
                     <Pressable onPress={() => router.back()} className="p-1">
-                        <Ionicons name="arrow-back" size={24} color="black" />
+                        <Ionicons name="arrow-back" size={24} color={color} />
                     </Pressable>
                 )}
                 {children}
