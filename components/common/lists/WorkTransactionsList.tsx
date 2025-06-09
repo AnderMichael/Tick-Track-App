@@ -41,7 +41,7 @@ const WorkTransactionsList = ({ transactions, isLoading = false, refetch }: Prop
             data={transactions}
             keyExtractor={(item) => item.id.toString()}
             renderItem={renderItem}
-            contentContainerStyle={{ paddingHorizontal: 20, paddingVertical: 15 }}
+            contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 15 }}
             refreshControl={
                 <RefreshControl refreshing={isLoading} onRefresh={refetch} />
             }

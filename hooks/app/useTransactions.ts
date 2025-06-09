@@ -24,6 +24,7 @@ export function useTransactions({ page = 1, limit = 10, work_id, semester_id, ad
 
     return {
         transactions: transactions?.data || [],
+        total: transactions?.total || 0,
         isFetching,
         isLoading,
         refetch

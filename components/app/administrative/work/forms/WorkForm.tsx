@@ -11,7 +11,6 @@ interface Props {
 const WorkForm = ({ control }: Props) => {
     return (
         <ScrollView contentContainerStyle={{ gap: 20, paddingVertical: 15 }}>
-
             <Screen.Section>
                 <Screen.SubTitle>
                     Título

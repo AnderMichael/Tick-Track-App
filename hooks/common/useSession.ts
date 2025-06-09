@@ -4,28 +4,31 @@ import { useRouter } from "expo-router";
 import { useMemo } from "react";
 
 export const useSession = () => {
-    const dispatch = useAppDispatch();
-    const router = useRouter();
-    const { user, loading } = useAppSelector((state) => state.session);
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+  const { user, loading } = useAppSelector((state) => state.session);
 
-    const isAuthenticated = useMemo(() => {
-        return !!user
-    }, [user]);
+  const isAuthenticated = useMemo(() => {
+    if (!user) {
+        return false;
+    }
+    return true;
+  }, [user]);
 
-    const login = (userData: any) => {
-        dispatch(setUser(userData));
-    };
+  const login = (userData: any) => {
+    dispatch(setUser(userData));
+  };
 
-    const logout = () => {
-        dispatch(logoutAction());
-        router.replace("/");
-    };
+  const logout = () => {
+    dispatch(logoutAction());
+    router.replace("/");
+  };
 
-    return {
-        user,
-        loading,
-        isAuthenticated,
-        login,
-        logout,
-    };
+  return {
+    user,
+    loading,
+    isAuthenticated,
+    login,
+    logout,
+  };
 };

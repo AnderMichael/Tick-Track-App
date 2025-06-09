@@ -1,8 +1,10 @@
 export interface Semester {
     id: number;
     name: string;
-    startDate: string;
-    endDate: string;
+    start_date: string;
+    end_date: string;
+    number: number;
+    year: number;
 }
 
 export interface PaginatedSemesters {

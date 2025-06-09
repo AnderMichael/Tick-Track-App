@@ -40,7 +40,7 @@ const WorkList = ({ works, isLoading = false, refetch }: Props) => {
       data={works}
       keyExtractor={(item) => item.id.toString()}
       renderItem={renderItem}
-      contentContainerStyle={{ paddingHorizontal: 20 }}
+      contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 15 }}
       refreshControl={<RefreshControl refreshing={isLoading} onRefresh={refetch} />}
       ItemSeparatorComponent={() => <View className="h-4" />}
       ListEmptyComponent={

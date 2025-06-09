@@ -8,3 +8,4 @@ export * from './modals';
 export * from './sheets';
 export * from './lists';
 export * from './pickers';
+export * from './pagination';

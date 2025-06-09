@@ -20,6 +20,7 @@ export function useWorks(page: number = 1, limit: number = 10) {
     
     return {
         works: worksList?.data || [],
+        total: worksList?.total || 0,
         isFetching,
         isLoading,
         refetch

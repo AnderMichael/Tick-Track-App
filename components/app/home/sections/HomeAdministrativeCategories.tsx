@@ -15,7 +15,7 @@ export default function HomeAdministrativeCategories() {
     return <>
         <WithRole allowed={[Role.SUPERVISOR, Role.SCHOLARSHIP_OFFICER, Role.ADMIN]}>
             <Screen.Title>Categorías de Información</Screen.Title>
-            <TouchableOpacity className="bg-black rounded-2xl p-4 h-28" onPress={() => { router.push("/administrative/works") }}>
+            <TouchableOpacity className="bg-black rounded-2xl p-4 h-28" onPress={() => { router.push("/(protected)/administrative/works") }}>
                 <Text className="text-white font-outfit-medium">Trabajos</Text>
             </TouchableOpacity>
         </WithRole>
@@ -23,7 +23,7 @@ export default function HomeAdministrativeCategories() {
             <TouchableOpacity className="bg-black rounded-2xl p-4 h-28">
                 <Text className="text-white font-outfit-medium">Estudiantes</Text>
             </TouchableOpacity>
-            <TouchableOpacity className="bg-black rounded-2xl p-4 h-28">
+            <TouchableOpacity className="bg-black rounded-2xl p-4 h-28" onPress={() => { router.push("/(protected)/administrative/supervisors") }}>
                 <Text className="text-white font-outfit-medium">Supervisores</Text>
             </TouchableOpacity>
         </WithRole>
@@ -31,10 +31,10 @@ export default function HomeAdministrativeCategories() {
             <TouchableOpacity className="bg-black rounded-2xl p-4 h-28">
                 <Text className="text-white font-outfit-medium">Encargados</Text>
             </TouchableOpacity>
-            <TouchableOpacity className="bg-black rounded-2xl p-4 h-28">
+            <TouchableOpacity className="bg-black rounded-2xl p-4 h-28" onPress={() => { router.push("/(protected)/administrative/semesters") }}>
                 <Text className="text-white font-outfit-medium">Semestres</Text>
             </TouchableOpacity>
-            <TouchableOpacity className="bg-black rounded-2xl p-4 h-28">
+            <TouchableOpacity className="bg-black rounded-2xl p-4 h-28" onPress={() => { router.push("/(protected)/administrative/scholarships") }}>
                 <Text className="text-white font-outfit-medium">Becas</Text>
             </TouchableOpacity>
         </WithRole>
