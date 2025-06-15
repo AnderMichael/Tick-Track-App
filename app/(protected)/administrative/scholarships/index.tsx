@@ -1,11 +1,76 @@
-import { Screen } from "@/components/common";
+import { ScholarshipList } from "@/components/app/administrative";
+import { CustomPagination, Screen } from "@/components/common";
+import { usePagination } from "@/hooks";
+import { useScholarships } from "@/hooks/app";
+import { RelativePathString, useRouter } from "expo-router";
+import React, { useEffect } from "react";
+import { Text } from "react-native";
 
-export default function ScholarshipsScreen() {
+const ScholarshipsListScreen = () => {
+  const router = useRouter();
+  const { page, setPage, limit, resetPagination } = usePagination();
+
+  const { isLoading, isFetching, refetch, scholarships, total } =
+    useScholarships({
+      page,
+      limit,
+    });
+
+  useEffect(() => {
+    refetch();
+  }, [page]);
+
+  useEffect(() => {
+    if (scholarships.length === 0 && page > 1) {
+      resetPagination();
+    }
+  }, [scholarships]);
+
+  const onEdit = (id: number) => {
+    router.push(
+      `/(protected)/administrative/scholarships/${id}/edit` as RelativePathString
+    );
+  };
+
+  const onDelete = (id: number) => {
+    router.push(
+      `/(protected)/administrative/scholarships/${id}/delete` as RelativePathString
+    );
+  };
+
+  const navToPercentages = (id: number) => {
+    router.push(
+      `/(protected)/administrative/scholarships/${id}/percentages` as RelativePathString
+    );
+  };
+
   return (
-    <Screen>
-      <Screen.Section>
-        <Screen.SubTitle>Becas</Screen.SubTitle>
-      </Screen.Section>
-    </Screen>
+    <>
+      <Screen>
+        <Screen.Section>
+          <Text
+            className="text-lg font-outfit-light"
+            style={{ color: "black" }}
+          >
+            Mostrando {scholarships.length} de {total}
+          </Text>
+        </Screen.Section>
+        <ScholarshipList
+          onEdit={onEdit}
+          onDelete={onDelete}
+          onPressPercentages={navToPercentages}
+          scholarships={scholarships}
+          isLoading={isLoading || isFetching}
+          refetch={refetch}
+        />
+      </Screen>
+      <CustomPagination
+        totalItems={total}
+        currentPage={page}
+        setCurrentPage={setPage}
+      />
+    </>
   );
-}
+};
+
+export default ScholarshipsListScreen;

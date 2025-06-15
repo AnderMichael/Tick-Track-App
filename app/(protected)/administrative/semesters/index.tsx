@@ -51,7 +51,7 @@ export default function SemestersScreen() {
   return (
     <Screen>
       <ScrollView
-        className="w-full h-full bg-white"
+        className="w-full h-full"
         contentContainerStyle={{ gap: 25, paddingVertical: 15 }}
         refreshControl={
           <RefreshControl refreshing={isLoading} onRefresh={refetch} />

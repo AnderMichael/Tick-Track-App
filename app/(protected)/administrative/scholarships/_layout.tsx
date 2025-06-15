@@ -34,7 +34,7 @@ export default function ScholarshipsLayout() {
         options={{
           header: () => (
             <CustomHeader>
-              <CustomHeader.Title>Crear Trabajo</CustomHeader.Title>
+              <CustomHeader.Title>Crear Beca</CustomHeader.Title>
             </CustomHeader>
           ),
         }}

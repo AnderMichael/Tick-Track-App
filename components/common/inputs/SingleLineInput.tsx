@@ -26,7 +26,7 @@ export function SingleLineInput<T extends FieldValues>({
           <>
             <TextInput
               placeholder={placeholder}
-              value={value}
+              value={value !== undefined && value !== null ? String(value) : ""}
               onChangeText={onChange}
               onBlur={onBlur}
               inputMode={inputMode}

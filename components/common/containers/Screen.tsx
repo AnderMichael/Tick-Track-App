@@ -13,7 +13,7 @@ interface Props {
 const Screen = ({ children, backgroundColor = WHITE }: Props) => {
     const headerHeight = useHeaderHeight();
     return (
-        <SafeAreaView className='flex flex-1' style={{ gap: 25, paddingTop: headerHeight, backgroundColor }}>
+        <SafeAreaView className='flex flex-1' style={{ gap: 25, paddingTop: headerHeight }}>
             {children}
         </SafeAreaView>
     )
