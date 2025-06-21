@@ -38,6 +38,15 @@ function WorkCardDate({ date }: { date: string }) {
   );
 }
 
+function WorkCardAdministrative({ name }: { name: string }) {
+  return (
+    <View className="flex-row items-center gap-2 mb-1">
+      <MaterialCommunityIcons name="account" color="white" size={20} />
+      <Text className="text-white font-outfit-regular text-sm">{name}</Text>
+    </View>
+  );
+}
+
 function WorkCardId({ id }: { id: string }) {
   return <Text className="text-white font-outfit-regular text-sm">{id}</Text>;
 }
@@ -45,5 +54,6 @@ function WorkCardId({ id }: { id: string }) {
 WorkCard.Title = WorkCardTitle;
 WorkCard.Date = WorkCardDate;
 WorkCard.Id = WorkCardId;
+WorkCard.Administrative = WorkCardAdministrative;
 
 export default WorkCard;

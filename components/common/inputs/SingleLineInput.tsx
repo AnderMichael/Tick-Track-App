@@ -7,6 +7,7 @@ type Props<T extends FieldValues> = {
   placeholder: string;
   inputMode?: InputModeOptions;
   className?: string;
+  disabled?: boolean;
 };
 
 export function SingleLineInput<T extends FieldValues>({
@@ -15,6 +16,7 @@ export function SingleLineInput<T extends FieldValues>({
   placeholder,
   inputMode = "text",
   className = "",
+  disabled = false
 }: Props<T>) {
 
   return (
@@ -31,6 +33,7 @@ export function SingleLineInput<T extends FieldValues>({
               onBlur={onBlur}
               inputMode={inputMode}
               className={`border border-black px-4 py-3 rounded-xl font-outfit-light ${className}`}
+              editable={!disabled}
             />
             {error && (
               <Text className="text-sm text-red-600 mt-1 font-outfit-light">

@@ -4,6 +4,7 @@ export interface User {
     fullName: string
     role: string
     department: string
+    departmentId: number
     isConfirmed: boolean
     phone: string
     student?: Student

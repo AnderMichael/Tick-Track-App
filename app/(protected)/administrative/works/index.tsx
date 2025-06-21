@@ -1,35 +1,30 @@
 import { CustomPagination, Screen, WorksList } from "@/components/common";
-import { useWorkOperationFlow } from "@/context/administrative";
 import { useSemester } from "@/context/home";
 import { usePagination } from "@/hooks";
-import { useWorks } from "@/hooks/app";
-import { useFocusEffect } from "expo-router";
-import React, { useCallback, useEffect } from "react";
+import { useWorkFilters, useWorks } from "@/hooks/app";
+import React, { useEffect } from "react";
 import { Text } from "react-native";
 
 const WorksListScreen = () => {
   const { semester } = useSemester();
   const { page, setPage, resetPagination, limit } = usePagination();
+  const { workFilters } = useWorkFilters();
+  
   const { isLoading, isFetching, refetch, works, total } = useWorks(
     page,
-    limit
+    limit,
+    workFilters
   );
-
-  const { reloadList, deactivateReloadList } = useWorkOperationFlow();
 
   useEffect(() => {
     refetch();
   }, [page]);
 
-  useFocusEffect(
-    useCallback(() => {
-      if (reloadList) {
-        refetch();
-        deactivateReloadList();
-        resetPagination();
-      }
-    }, [reloadList])
-  );
+  useEffect(() => {
+    if (works.length === 0 && page > 1) {
+      resetPagination();
+    }
+  }, [works]);
 
   return (
     <>
@@ -41,13 +36,14 @@ const WorksListScreen = () => {
               className="text-lg font-outfit-medium"
               style={{ color: "black" }}
             >
-              {semester!.label}{'\n'}
+              {semester!.label}
+              {"\n"}
             </Text>
             <Text
               className="text-lg font-outfit-light"
               style={{ color: "black" }}
             >
-            Mostrando {works.length} de {total}
+              Mostrando {works.length} de {total}
             </Text>
           </Screen.SubTitle>
         </Screen.Section>
