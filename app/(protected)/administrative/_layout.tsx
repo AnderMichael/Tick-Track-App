@@ -28,6 +28,12 @@ export default function AdministrativeLayout() {
         }}
       />
       <Stack.Screen
+        name="students"
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
         name="scholarship_officers"
         options={{
           headerShown: false,

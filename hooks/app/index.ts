@@ -14,3 +14,5 @@ export * from "./useTransactions";
 export * from "./useWork";
 export * from "./useWorkFilters";
 export * from "./useWorks";
+export * from "./useStudent";
+export * from "./useStudents";
