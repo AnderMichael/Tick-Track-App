@@ -1,31 +1,30 @@
 import { ScholarshipOfficerForm } from "@/components/app/administrative";
 import { Button, ErrorModal, ProcessingModal } from "@/components/common";
+import { scholarshipOfficerSchema } from "@/forms/administrative";
 import { parseAPIError } from "@/helpers/common";
 import { useScholarshipOfficer } from "@/hooks/app";
-import { scholarshipOfficerSchema } from "@/forms/administrative";
+import { useScholarshipOfficerFilters } from "@/hooks/app/useScholarshipOfficerFilters";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "expo-router";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { View } from "react-native";
-import { useState } from "react";
 import * as yup from "yup";
 
-type ScholarshipOfficerFormData = yup.InferType<typeof scholarshipOfficerSchema>;
+type ScholarshipOfficerFormData = yup.InferType<
+  typeof scholarshipOfficerSchema
+>;
 
 export default function CreateScholarshipOfficerScreen() {
   const router = useRouter();
   const [errorVisible, setErrorVisible] = useState(false);
 
-  const {
-    createNewOfficer,
-    isLoadingCreation,
-    errorCreation,
-  } = useScholarshipOfficer();
+  const { createNewOfficer, isLoadingCreation, errorCreation } =
+    useScholarshipOfficer();
 
-  const {
-    control,
-    handleSubmit,
-  } = useForm<ScholarshipOfficerFormData>({
+  const { roleId } = useScholarshipOfficerFilters();
+
+  const { control, handleSubmit } = useForm<ScholarshipOfficerFormData>({
     resolver: yupResolver(scholarshipOfficerSchema),
     defaultValues: {
       upbCode: 0,
@@ -36,7 +35,7 @@ export default function CreateScholarshipOfficerScreen() {
       email: "",
       phone: "",
       department_id: 0,
-      role_id: 0,
+      role_id: roleId,
       upbRole: "",
     },
   });
@@ -55,7 +54,10 @@ export default function CreateScholarshipOfficerScreen() {
       <ErrorModal
         visible={errorVisible}
         onClose={() => setErrorVisible(false)}
-        message={parseAPIError(errorCreation, "Error al crear el encargado de becas.")}
+        message={parseAPIError(
+          errorCreation,
+          "Error al crear el encargado de becas."
+        )}
       />
       <ProcessingModal visible={isLoadingCreation} />
       <ScholarshipOfficerForm control={control} />

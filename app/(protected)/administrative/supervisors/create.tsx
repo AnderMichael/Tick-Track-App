@@ -1,13 +1,14 @@
 import { SupervisorForm } from "@/components/app/administrative/supervisors";
 import { Button, ErrorModal, ProcessingModal } from "@/components/common";
+import { supervisorSchema } from "@/forms/administrative";
 import { parseAPIError } from "@/helpers/common";
 import { useSupervisor } from "@/hooks/app";
-import { supervisorSchema } from "@/forms/administrative";
+import { useSupervisorFilters } from "@/hooks/app/useSupervisorFilters";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "expo-router";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { View } from "react-native";
-import { useState } from "react";
 import * as yup from "yup";
 
 type SupervisorFormData = yup.InferType<typeof supervisorSchema>;
@@ -16,16 +17,12 @@ export default function CreateSupervisorScreen() {
   const router = useRouter();
   const [errorVisible, setErrorVisible] = useState(false);
 
-  const {
-    createNewSupervisor,
-    isLoadingCreation,
-    errorCreation,
-  } = useSupervisor();
+  const { createNewSupervisor, isLoadingCreation, errorCreation } =
+    useSupervisor();
 
-  const {
-    control,
-    handleSubmit,
-  } = useForm<SupervisorFormData>({
+  const { roleId, filters } = useSupervisorFilters();
+
+  const { control, handleSubmit, reset } = useForm<SupervisorFormData>({
     resolver: yupResolver(supervisorSchema),
     defaultValues: {
       upbCode: 0,
@@ -36,7 +33,7 @@ export default function CreateSupervisorScreen() {
       email: "",
       phone: "",
       department_id: 0,
-      role_id: 0,
+      role_id: roleId,
       upbRole: "",
     },
   });
@@ -49,6 +46,21 @@ export default function CreateSupervisorScreen() {
       setErrorVisible(true);
     }
   };
+
+  useEffect(() => {
+    reset({
+      upbCode: 0,
+      firstName: "",
+      secondName: "",
+      fatherLastName: "",
+      motherLastName: "",
+      email: "",
+      phone: "",
+      department_id: filters?.department_id,
+      role_id: roleId,
+      upbRole: "",
+    });
+  }, []);
 
   return (
     <>

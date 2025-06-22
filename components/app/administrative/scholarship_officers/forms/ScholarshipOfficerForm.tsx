@@ -1,7 +1,8 @@
-import { Screen } from "@/components/common";
+import { DepartmentDropdown, Screen } from "@/components/common";
 import { SingleLineInput } from "@/components/common/inputs";
 import React from "react";
 import { Control } from "react-hook-form";
+import { Text } from "react-native";
 import { ScrollView } from "react-native";
 
 interface Props {
@@ -13,6 +14,9 @@ const ScholarshipOfficerForm = ({ control, edit = false }: Props) => {
   return (
     <ScrollView contentContainerStyle={{ gap: 20, paddingVertical: 15 }}>
       <Screen.Section>
+        <Screen.SubTitle>Departamento</Screen.SubTitle>
+        <DepartmentDropdown control={control} name="department_id" />
+
         <Screen.SubTitle>Código UPB</Screen.SubTitle>
         <SingleLineInput
           control={control}
@@ -21,6 +25,11 @@ const ScholarshipOfficerForm = ({ control, edit = false }: Props) => {
           inputMode="numeric"
           disabled={edit}
         />
+        <Text className="text-sm text-gray-500 font-outfit-light">
+          {edit
+            ? "No se puede editar después de crear."
+            : "Se puede editar al crear."}
+        </Text>
 
         <Screen.SubTitle>Nombre</Screen.SubTitle>
         <SingleLineInput
@@ -71,22 +80,6 @@ const ScholarshipOfficerForm = ({ control, edit = false }: Props) => {
           control={control}
           name="upbRole"
           placeholder="Ej. Encargado de Becas"
-        />
-
-        <Screen.SubTitle>Departamento (ID)</Screen.SubTitle>
-        <SingleLineInput
-          control={control}
-          name="department_id"
-          placeholder="Ej. 1"
-          inputMode="numeric"
-        />
-
-        <Screen.SubTitle>Rol del Sistema (ID)</Screen.SubTitle>
-        <SingleLineInput
-          control={control}
-          name="role_id"
-          placeholder="Ej. 2"
-          inputMode="numeric"
         />
       </Screen.Section>
     </ScrollView>

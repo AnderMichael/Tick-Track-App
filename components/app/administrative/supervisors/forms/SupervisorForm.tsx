@@ -1,8 +1,9 @@
-import { Screen } from "@/components/common";
+import { DepartmentDropdown, Screen, WithRole } from "@/components/common";
 import { SingleLineInput } from "@/components/common/inputs";
+import { Role } from "@/constants/common/roles";
 import React from "react";
 import { Control } from "react-hook-form";
-import { ScrollView } from "react-native";
+import { ScrollView, Text } from "react-native";
 
 interface Props {
   control: Control<any>;
@@ -13,6 +14,11 @@ const SupervisorForm = ({ control, edit = false }: Props) => {
   return (
     <ScrollView contentContainerStyle={{ gap: 20, paddingVertical: 15 }}>
       <Screen.Section>
+        <WithRole allowed={[Role.ADMIN]}>
+          <Screen.SubTitle>Departamento</Screen.SubTitle>
+          <DepartmentDropdown control={control} name="department_id" />
+        </WithRole>
+
         <Screen.SubTitle>Código UPB</Screen.SubTitle>
         <SingleLineInput
           control={control}
@@ -21,6 +27,9 @@ const SupervisorForm = ({ control, edit = false }: Props) => {
           inputMode="numeric"
           disabled={edit}
         />
+        <Text className="text-sm text-gray-500 font-outfit-light">
+          {edit ? "No se puede editar después de crear." : "Se puede editar al crear. El código no debe ser usado por nigún otro usuario"}
+        </Text>
 
         <Screen.SubTitle>Nombre</Screen.SubTitle>
         <SingleLineInput
@@ -71,22 +80,6 @@ const SupervisorForm = ({ control, edit = false }: Props) => {
           control={control}
           name="upbRole"
           placeholder="Ej. Supervisor Académico"
-        />
-
-        <Screen.SubTitle>Departamento (ID)</Screen.SubTitle>
-        <SingleLineInput
-          control={control}
-          name="department_id"
-          placeholder="Ej. 1"
-          inputMode="numeric"
-        />
-
-        <Screen.SubTitle>Rol del Sistema (ID)</Screen.SubTitle>
-        <SingleLineInput
-          control={control}
-          name="role_id"
-          placeholder="Ej. 2"
-          inputMode="numeric"
         />
       </Screen.Section>
     </ScrollView>

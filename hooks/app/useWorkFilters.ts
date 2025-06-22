@@ -13,7 +13,7 @@ export function useWorkFilters() {
     if (user.role === Role.SUPERVISOR) {
       setWorkFilters({ author: user.upbCode });
     } else if (user.role === Role.SCHOLARSHIP_OFFICER) {
-      setWorkFilters({ department: user.departmentId });
+      setWorkFilters({ department: user.department_id });
     } else if (user.role === Role.ADMIN) {
       setWorkFilters({});
     }

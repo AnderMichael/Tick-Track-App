@@ -1,15 +1,17 @@
 import { CustomPagination, Screen, SupervisorsList } from "@/components/common";
 import { usePagination } from "@/hooks";
 import { useSupervisors } from "@/hooks/app";
+import { useSupervisorFilters } from "@/hooks/app/useSupervisorFilters";
 import React, { useEffect } from "react";
 import { Text } from "react-native";
 
 const SupervisorsListScreen = () => {
   const { page, setPage, resetPagination, limit } = usePagination();
-
+  const { filters } = useSupervisorFilters();
   const { isLoading, isFetching, refetch, supervisors, total } = useSupervisors(
     page,
-    limit
+    limit,
+    filters
   );
 
   useEffect(() => {
