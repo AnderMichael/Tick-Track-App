@@ -1,5 +1,5 @@
+import { YearPickerModal } from "@/components/app/home";
 import { Pressable, Text } from "react-native";
-import { YearPickerModal } from "../../../home";
 
 interface Props {
   yearSelected: number;

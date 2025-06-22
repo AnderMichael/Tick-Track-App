@@ -27,6 +27,12 @@ export default function AdministrativeLayout() {
           headerShown: false,
         }}
       />
+      <Stack.Screen
+        name="scholarship_officers"
+        options={{
+          headerShown: false,
+        }}
+      />
     </Stack>
   );
 }

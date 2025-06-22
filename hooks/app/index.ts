@@ -2,6 +2,8 @@ export * from "./useModal";
 export * from "./usePercentage";
 export * from "./usePercentages";
 export * from "./useScholarship";
+export * from "./useScholarshipOfficer";
+export * from "./useScholarshipOfficers";
 export * from "./useScholarships";
 export * from "./useSemester";
 export * from "./useSemesters";
@@ -12,4 +14,3 @@ export * from "./useTransactions";
 export * from "./useWork";
 export * from "./useWorkFilters";
 export * from "./useWorks";
-

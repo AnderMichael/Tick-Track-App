@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import {
   administrativeApi,
+  scholarshipOfficersApi,
   scholarshipsApi,
   semestersApi,
   studentApi,
@@ -22,6 +23,7 @@ export const store = configureStore({
     [worksApi.reducerPath]: worksApi.reducer,
     [scholarshipsApi.reducerPath]: scholarshipsApi.reducer,
     [supervisorsApi.reducerPath]: supervisorsApi.reducer,
+    [scholarshipOfficersApi.reducerPath]: scholarshipOfficersApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
@@ -32,7 +34,8 @@ export const store = configureStore({
       .concat(transactionsApi.middleware)
       .concat(worksApi.middleware)
       .concat(scholarshipsApi.middleware)
-      .concat(supervisorsApi.middleware),
+      .concat(supervisorsApi.middleware)
+      .concat(scholarshipOfficersApi.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

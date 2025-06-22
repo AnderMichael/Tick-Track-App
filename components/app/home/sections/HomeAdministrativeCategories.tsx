@@ -38,7 +38,7 @@ export default function HomeAdministrativeCategories() {
             </TouchableOpacity>
         </WithRole>
         <WithRole allowed={[Role.ADMIN]}>
-            <TouchableOpacity className="bg-black rounded-2xl p-4 h-28">
+            <TouchableOpacity className="bg-black rounded-2xl p-4 h-28" onPress={() => { router.push("/(protected)/administrative/scholarship_officers")}}>
                 <Text className="text-white font-outfit-medium">Encargados</Text>
                 <View className="absolute bottom-[-30] right-0 opacity-25">
                     <MaterialIcons name="shield" color="white" size={120} />

@@ -6,7 +6,7 @@ interface Props {
     color?: string;
     textColor?: string;
     disabled?: boolean;
-    onPress: () => void;
+    onPress: () => void | Promise<void>;
     children: React.ReactNode;
 }
 

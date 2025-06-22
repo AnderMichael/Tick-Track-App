@@ -1,5 +1,6 @@
 import {
   ConfirmationModal,
+  LockButton,
   ProcessingModal,
   Screen,
 } from "@/components/common";
@@ -21,7 +22,21 @@ export default function WorkDetailScreen() {
   const { id: work_id } = useLocalSearchParams();
   const router = useRouter();
   const { isVisible, closeModal, openModal } = useModal();
-  const { work, isLoading, refetch, removeWork, isLoadingDeletion } = useWork({
+  const {
+    isVisible: isVisibleLockModal,
+    closeModal: closeLockModal,
+    openModal: openLockModal,
+  } = useModal();
+
+  const {
+    work,
+    isLoading,
+    refetch,
+    removeWork,
+    isLoadingDeletion,
+    lockWork,
+    unlockWork,
+  } = useWork({
     work_id: parseInt(work_id as string),
   });
 
@@ -42,6 +57,14 @@ export default function WorkDetailScreen() {
     }
   }
 
+  async function handleLockWork() {
+    try {
+      await lockWork();
+      closeLockModal();
+    } catch (error) {
+      console.error("Error al desbloquear el trabajo:", error);
+    }
+  }
   if (isLoading || isLoadingDeletion) return <ProcessingModal visible />;
 
   return (
@@ -57,6 +80,17 @@ export default function WorkDetailScreen() {
           closeModal();
         }}
       />
+      <ConfirmationModal
+        visible={isVisibleLockModal}
+        title="Cerrar Trabajo"
+        message="¿Estás seguro de que deseas cerrar este trabajo? Esta acción no se puede deshacer a menos que tengas el rol de administrador o encargado de becas."
+        confirmText="Cerrar"
+        cancelText="Cancelar"
+        onConfirm={handleLockWork}
+        onCancel={() => {
+          closeLockModal();
+        }}
+      />
       <Screen>
         <ScrollView
           contentContainerStyle={{ paddingVertical: 20, gap: 35 }}
@@ -66,15 +100,18 @@ export default function WorkDetailScreen() {
         >
           <Screen.Section>
             <View className="flex-row justify-between items-center">
-              <TouchableOpacity className="bg-black rounded-full flex-row items-center px-4 py-2 h-12">
-                <MaterialIcons name="lock" size={18} color="white" />
-                <Text className="text-white ml-2 font-outfit-medium">
-                  Cerrar
-                </Text>
-              </TouchableOpacity>
+              <LockButton
+                open={unlockWork}
+                close={openLockModal}
+                openText="Abrir"
+                closeText="Cerrar"
+                isOpen={work!.is_open}
+              />
               <View className="flex-row gap-2">
                 <TouchableOpacity
                   className="bg-gray-200 rounded-full p-3"
+                  style={{ opacity: work!.is_open ? 1 : 0.4 }}
+                  disabled={!work!.is_open}
                   onPress={() =>
                     router.push(
                       `/(protected)/administrative/works/${work_id}/edit`
@@ -85,6 +122,8 @@ export default function WorkDetailScreen() {
                 </TouchableOpacity>
                 <TouchableOpacity
                   className="bg-gray-200 rounded-full p-3"
+                  style={{ opacity: work!.is_open ? 1 : 0.4 }}
+                  disabled={!work!.is_open}
                   onPress={openModal}
                 >
                   <MaterialIcons name="delete" size={20} color="black" />
@@ -147,6 +186,8 @@ export default function WorkDetailScreen() {
             <View className="flex-row justify-between">
               <TouchableOpacity
                 className="items-center flex-1"
+                style={{ opacity: work!.is_open ? 1 : 0.4 }}
+                disabled={!work!.is_open}
                 onPress={() =>
                   router.push(
                     `/(protected)/administrative/works/${work_id}/scanQR`
@@ -163,7 +204,11 @@ export default function WorkDetailScreen() {
                 <Text className="font-outfit-medium">Escanear QR</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity className="items-center flex-1">
+              <TouchableOpacity
+                className="items-center flex-1"
+                style={{ opacity: work!.is_open ? 1 : 0.4 }}
+                disabled={!work!.is_open}
+              >
                 <View className="w-20 h-20 bg-gray-200 rounded-full justify-center items-center mb-2">
                   <MaterialCommunityIcons
                     name="qrcode"

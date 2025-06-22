@@ -8,6 +8,7 @@ const { API_URL } = environmentVariables;
 export const administrativeApi = createApi({
   reducerPath: "administrativeApi",
   baseQuery: baseQueryWithInterceptor(`${API_URL}/administratives`),
+  tagTypes: ["WorkTracksInfo"],
   endpoints: (builder) => ({
     workTracksInfo: builder.query<
       WorkTracksInfo,
@@ -21,6 +22,8 @@ export const administrativeApi = createApi({
           department_id: params.department_id,
         },
       }),
+      providesTags: (result) =>
+        result ? [{ type: "WorkTracksInfo", id: 'TRACKS' }] : [],
     }),
   }),
 });

@@ -2,9 +2,11 @@ import {
   useCreateSupervisorMutation,
   useDeleteSupervisorMutation,
   useEditSupervisorMutation,
+  useLockSupervisorMutation,
   useSupervisorQuery,
+  useUnlockSupervisorMutation,
 } from "@/store/api/app";
-import { CreateSupervisor, Supervisor } from "@/interfaces/administrative";
+import { CreateSupervisor } from "@/interfaces/administrative";
 
 interface SupervisorQueryParams {
   supervisor_id?: number;
@@ -51,6 +53,24 @@ export function useSupervisor({ supervisor_id }: SupervisorQueryParams = {}) {
     },
   ] = useDeleteSupervisorMutation();
 
+  const [
+    lockSupervisorMutation,
+    {
+      isLoading: isLoadingLock,
+      isError: isErrorLock,
+      error: errorLock,
+    },
+  ] = useLockSupervisorMutation();
+
+  const [
+    unlockSupervisorMutation,
+    {
+      isLoading: isLoadingUnlock,
+      isError: isErrorUnlock,
+      error: errorUnlock,
+    },
+  ] = useUnlockSupervisorMutation();
+
   async function createNewSupervisor(data: CreateSupervisor) {
     try {
       await createSupervisor(data).unwrap();
@@ -80,6 +100,26 @@ export function useSupervisor({ supervisor_id }: SupervisorQueryParams = {}) {
     }
   }
 
+  async function lockSupervisor() {
+    if (!supervisor_id) throw new Error("lockSupervisor requires supervisor_id");
+    try {
+      await lockSupervisorMutation({ upbCode: supervisor_id }).unwrap();
+    } catch (error) {
+      console.error("Error locking supervisor:", error);
+      throw error;
+    }
+  }
+
+  async function unlockSupervisor() {
+    if (!supervisor_id) throw new Error("unlockSupervisor requires supervisor_id");
+    try {
+      await unlockSupervisorMutation({ upbCode: supervisor_id }).unwrap();
+    } catch (error) {
+      console.error("Error unlocking supervisor:", error);
+      throw error;
+    }
+  }
+
   return {
     supervisor: enableQuery ? supervisor : null,
     isLoading: enableQuery ? isLoading || isFetching : false,
@@ -100,5 +140,15 @@ export function useSupervisor({ supervisor_id }: SupervisorQueryParams = {}) {
     isLoadingDeletion,
     isErrorDeletion,
     errorDeletion,
+
+    lockSupervisor,
+    isLoadingLock,
+    isErrorLock,
+    errorLock,
+
+    unlockSupervisor,
+    isLoadingUnlock,
+    isErrorUnlock,
+    errorUnlock,
   };
 }

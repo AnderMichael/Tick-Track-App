@@ -10,13 +10,24 @@ export type CreateWork = Omit<Work, "administrative" | "id">;
 export const worksApi = createApi({
   reducerPath: "worksApi",
   baseQuery: baseQueryWithInterceptor(`${API_URL}/works`),
-  tagTypes: ["Work", "Works"],
+  tagTypes: ["Work", "Works", "WorkTracksInfo"],
   endpoints: (builder) => ({
     works: builder.query<
       PaginatedWorks,
-      { semester_id: number; page?: number; limit?: number; administrative_upb_code?: number; work_id?: number }
+      {
+        semester_id: number;
+        page?: number;
+        limit?: number;
+        administrative_upb_code?: number;
+        work_id?: number;
+      }
     >({
-      query: ({ semester_id, page = 1, limit = 10, administrative_upb_code }) => ({
+      query: ({
+        semester_id,
+        page = 1,
+        limit = 10,
+        administrative_upb_code,
+      }) => ({
         url: "/",
         method: "GET",
         params: {
@@ -29,7 +40,10 @@ export const worksApi = createApi({
       providesTags: (result) =>
         result?.data
           ? [
-              ...result.data.map((work) => ({ type: "Work" as const, id: work.id })),
+              ...result.data.map((work) => ({
+                type: "Work" as const,
+                id: work.id,
+              })),
               { type: "Works", id: "LIST" },
             ]
           : [{ type: "Works", id: "LIST" }],
@@ -47,9 +61,12 @@ export const worksApi = createApi({
         method: "POST",
         body,
       }),
-      invalidatesTags: [{ type: "Works", id: "LIST" }],
+      invalidatesTags: [{ type: "Works", id: "LIST" }, { type: "WorkTracksInfo", id: "TRACKS" }],
     }),
-    editWork: builder.mutation<{ message: string }, { id: number; body: Partial<CreateWork> }>({
+    editWork: builder.mutation<
+      { message: string },
+      { id: number; body: Partial<CreateWork> }
+    >({
       query: ({ id, body }) => ({
         url: `/${id}`,
         method: "PATCH",
@@ -58,6 +75,7 @@ export const worksApi = createApi({
       invalidatesTags: (result, error, { id }) => [
         { type: "Work", id },
         { type: "Works", id: "LIST" },
+        { type: "WorkTracksInfo", id: "TRACKS" }
       ],
     }),
     deleteWork: builder.mutation<{ message: string }, { id: number }>({
@@ -68,6 +86,29 @@ export const worksApi = createApi({
       invalidatesTags: (result, error, { id }) => [
         { type: "Work", id },
         { type: "Works", id: "LIST" },
+        { type: "WorkTracksInfo", id: "TRACKS" }
+      ],
+    }),
+    lockWork: builder.mutation<{ message: string }, { id: number }>({
+      query: ({ id }) => ({
+        url: `/${id}/lock`,
+        method: "PATCH",
+      }),
+      invalidatesTags: (result, error, { id }) => [
+        { type: "Work", id },
+        { type: "Works", id: "LIST" },
+        { type: "WorkTracksInfo", id: "TRACKS" }
+      ],
+    }),
+    unlockWork: builder.mutation<{ message: string }, { id: number }>({
+      query: ({ id }) => ({
+        url: `/${id}/unlock`,
+        method: "PATCH",
+      }),
+      invalidatesTags: (result, error, { id }) => [
+        { type: "Work", id },
+        { type: "Works", id: "LIST" },
+        { type: "WorkTracksInfo", id: "TRACKS" }
       ],
     }),
   }),
@@ -79,4 +120,6 @@ export const {
   useCreateWorkMutation,
   useEditWorkMutation,
   useDeleteWorkMutation,
+  useLockWorkMutation,
+  useUnlockWorkMutation,
 } = worksApi;

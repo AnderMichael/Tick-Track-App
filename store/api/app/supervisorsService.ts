@@ -1,7 +1,11 @@
 import { environmentVariables } from "@/config";
+import {
+  CreateSupervisor,
+  PaginatedSupervisors,
+  Supervisor,
+} from "@/interfaces/administrative";
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { baseQueryWithInterceptor } from "../baseQueryWithInterceptor";
-import {Supervisor, PaginatedSupervisors, CreateSupervisor } from "@/interfaces/administrative";
 
 const { API_URL } = environmentVariables;
 
@@ -43,10 +47,7 @@ export const supervisorsApi = createApi({
       providesTags: (result, error, { id }) => [{ type: "Supervisor", id }],
     }),
 
-    createSupervisor: builder.mutation<
-      { message: string },
-      CreateSupervisor
-    >({
+    createSupervisor: builder.mutation<{ message: string }, CreateSupervisor>({
       query: (body) => ({
         url: "/",
         method: "POST",
@@ -80,6 +81,26 @@ export const supervisorsApi = createApi({
         { type: "Supervisors", id: "LIST" },
       ],
     }),
+    lockSupervisor: builder.mutation<{ message: string }, { upbCode: number }>({
+      query: ({ upbCode }) => ({
+        url: `/${upbCode}/lock`,
+        method: "PATCH",
+      }),
+      invalidatesTags: (result, error, { upbCode }) => [
+        { type: "Supervisor", id: upbCode },
+        { type: "Supervisors", id: "LIST" },
+      ],
+    }),
+    unlockSupervisor: builder.mutation<{ message: string }, { upbCode: number }>({
+      query: ({ upbCode }) => ({
+        url: `/${upbCode}/unlock`,
+        method: "PATCH",
+      }),
+      invalidatesTags: (result, error, { upbCode }) => [
+        { type: "Supervisor", id: upbCode },
+        { type: "Supervisors", id: "LIST" },
+      ],
+    }),
   }),
 });
 
@@ -89,4 +110,6 @@ export const {
   useCreateSupervisorMutation,
   useEditSupervisorMutation,
   useDeleteSupervisorMutation,
+  useLockSupervisorMutation,
+  useUnlockSupervisorMutation,
 } = supervisorsApi;

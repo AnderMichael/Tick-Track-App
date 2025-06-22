@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import WorkCard from "../cards/WorkCard";
 import { Screen, WithRole } from "../containers";
+import { MaterialIcons } from "@expo/vector-icons";
 
 interface Props {
   works: Work[];
@@ -28,6 +29,11 @@ const WorkList = ({ works, isLoading = false, refetch }: Props) => {
           <WorkCard.Administrative name={work.administrative.name} />
         </WithRole>
         <WorkCard.Id id={`Nro Trabajo: ${work.id}`} />
+        {!work.is_open && (
+          <View className="absolute bottom-[-30] right-0 opacity-25">
+            <MaterialIcons name="lock" color="white" size={120} />
+          </View>
+        )}
       </WorkCard>
     ),
     []

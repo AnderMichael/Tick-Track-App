@@ -1,5 +1,5 @@
 import { Role } from "@/constants/common/roles";
-import { Supervisor } from "@/interfaces/administrative";
+import { ScholarshipOfficer } from "@/interfaces/administrative";
 import { MaterialIcons } from "@expo/vector-icons";
 import React, { useCallback } from "react";
 import {
@@ -9,37 +9,37 @@ import {
   Text,
   View,
 } from "react-native";
-import { SupervisorCard } from "../cards";
+import { ScholarshipOfficerCard } from "../cards";
 import { Screen, WithRole } from "../containers";
 
 interface Props {
-  supervisors: Supervisor[];
+  officers: ScholarshipOfficer[];
   isLoading?: boolean;
   refetch?: () => void;
 }
 
-const SupervisorsList = ({
-  supervisors,
+const ScholarshipOfficersList = ({
+  officers,
   isLoading = false,
   refetch,
 }: Props) => {
-  const renderItem: ListRenderItem<Supervisor> = useCallback(
-    ({ item: supervisor }) => (
-      <SupervisorCard supervisor_id={supervisor.upbCode}>
-        <SupervisorCard.Title>
-          {supervisor.firstName} {supervisor.fatherLastName}
-        </SupervisorCard.Title>
-        <SupervisorCard.Email email={supervisor.email} />
+  const renderItem: ListRenderItem<ScholarshipOfficer> = useCallback(
+    ({ item: officer }) => (
+      <ScholarshipOfficerCard officer_id={officer.upbCode}>
+        <ScholarshipOfficerCard.Title>
+          {officer.firstName} {officer.fatherLastName}
+        </ScholarshipOfficerCard.Title>
+        <ScholarshipOfficerCard.Email email={officer.email} />
         <WithRole allowed={[Role.ADMIN]}>
-          <SupervisorCard.Department department={supervisor.department} />
+          <ScholarshipOfficerCard.Department department={officer.department} />
         </WithRole>
-        <SupervisorCard.Id id={`${supervisor.upbCode}`} />
-        {!supervisor.isAvailable && (
+        <ScholarshipOfficerCard.Id id={`${officer.upbCode}`} />
+        {!officer.isAvailable && (
           <View className="absolute bottom-[-30] right-0 opacity-25">
             <MaterialIcons name="lock" color="white" size={120} />
           </View>
         )}
-      </SupervisorCard>
+      </ScholarshipOfficerCard>
     ),
     []
   );
@@ -47,17 +47,17 @@ const SupervisorsList = ({
   if (isLoading) {
     return (
       <Screen.Section>
-        <SupervisorCard isLoading />
-        <SupervisorCard isLoading />
-        <SupervisorCard isLoading />
-        <SupervisorCard isLoading />
+        <ScholarshipOfficerCard isLoading />
+        <ScholarshipOfficerCard isLoading />
+        <ScholarshipOfficerCard isLoading />
+        <ScholarshipOfficerCard isLoading />
       </Screen.Section>
     );
   }
 
   return (
     <FlatList
-      data={supervisors}
+      data={officers}
       keyExtractor={(item) => item.upbCode.toString()}
       renderItem={renderItem}
       contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 15 }}
@@ -67,11 +67,11 @@ const SupervisorsList = ({
       ItemSeparatorComponent={() => <View className="h-4" />}
       ListEmptyComponent={
         <Text className="text-center text-2xl font-outfit-extralight">
-          No se encontraron supervisores
+          No se encontraron encargados de becas
         </Text>
       }
     />
   );
 };
 
-export default SupervisorsList;
+export default ScholarshipOfficersList;
