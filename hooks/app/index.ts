@@ -16,3 +16,4 @@ export * from "./useWorkFilters";
 export * from "./useWorks";
 export * from "./useStudent";
 export * from "./useStudents";
+export * from "./useInscriptions";

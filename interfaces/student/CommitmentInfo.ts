@@ -13,3 +13,11 @@ interface Scholarship {
     name: string
     description: string
 }
+
+export interface Commitment {
+    id: number
+    isCurrent: boolean
+    scholarship: string
+    percentage: number
+    hoursPerSemester: number
+}

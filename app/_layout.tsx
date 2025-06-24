@@ -1,5 +1,5 @@
 import { store } from "@/store/store";
-import { Stack } from "expo-router";
+import { Slot, Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import { Provider } from "react-redux";
@@ -41,10 +41,7 @@ export default function RootLayout() {
 
   return (
     <Provider store={store}>
-      <Stack initialRouteName="(protected)" screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="(protected)"/>
-        <Stack.Screen name="auth"/>
-      </Stack>
+      <Slot />
     </Provider>
   );
 }

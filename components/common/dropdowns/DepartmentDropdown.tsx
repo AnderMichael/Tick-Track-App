@@ -1,7 +1,7 @@
-import { OptionDropdown } from "@/components/common";
 import { useSession } from "@/hooks";
 import { Controller } from "react-hook-form";
 import { Text, View } from "react-native";
+import OptionDropdown from "./OptionDropdown";
 
 interface Props {
   control: any;

@@ -6,10 +6,16 @@ import {
   ProcessingModal,
   Screen,
 } from "@/components/common";
+import { useCurrentStudent } from "@/context/administrative";
 import { useAuth } from "@/hooks";
 import { useModal, useStudent } from "@/hooks/app";
-import { MaterialIcons } from "@expo/vector-icons";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import {
+  RelativePathString,
+  useLocalSearchParams,
+  useRouter,
+} from "expo-router";
+import { useEffect } from "react";
 import {
   RefreshControl,
   ScrollView,
@@ -53,6 +59,14 @@ export default function StudentDetailScreen() {
   } = useStudent({
     student_id: parseInt(student_id as string),
   });
+
+  const { setStudent: setCurrentStudent } = useCurrentStudent();
+  
+  useEffect(() => {
+    if (student) {
+      setCurrentStudent(student);
+    }
+  }, [student]);
 
   const handleDelete = async () => {
     try {
@@ -156,17 +170,52 @@ export default function StudentDetailScreen() {
               </View>
             </View>
           </Screen.Section>
-
+          <Screen.Section>
+            <TouchableOpacity
+              className="bg-black rounded-2xl p-4 h-28"
+              onPress={() => {
+                router.push({
+                  pathname: `/(protected)/administrative/students/${
+                    student_id as string
+                  }/scholarship` as RelativePathString,
+                  params: {
+                    student_id: student_id as string,
+                  },
+                });
+              }}
+            >
+              <Text className="text-white font-outfit-medium">Becas</Text>
+              <View className="absolute bottom-[-30] right-0 opacity-25">
+                <Ionicons name="ticket" color="white" size={120} />
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity
+              className="bg-black rounded-2xl p-4 h-28"
+              onPress={() => {
+                router.push({
+                  pathname: `/(protected)/administrative/students/${
+                    student_id as string
+                  }/inscriptions` as RelativePathString,
+                  params: {
+                    student_id: student_id as string,
+                  },
+                });
+              }}
+            >
+              <Text className="text-white font-outfit-medium">
+                Inscripciones
+              </Text>
+              <View className="absolute bottom-[-30] right-0 opacity-25">
+                <Ionicons name="time" color="white" size={120} />
+              </View>
+            </TouchableOpacity>
+          </Screen.Section>
           <Screen.Section>
             <ReadonlyField label="Primer Nombre">
-              <Text className="font-outfit-regular">
-                {student?.firstName}
-              </Text>
+              <Text className="font-outfit-regular">{student?.firstName}</Text>
             </ReadonlyField>
             <ReadonlyField label="Segundo Nombre">
-              <Text className="font-outfit-regular">
-                {student?.secondName}
-              </Text>
+              <Text className="font-outfit-regular">{student?.secondName}</Text>
             </ReadonlyField>
             <ReadonlyField label="Apellido Paterno">
               <Text className="font-outfit-regular">
@@ -182,9 +231,7 @@ export default function StudentDetailScreen() {
               <Text className="font-outfit-regular">{student?.upbCode}</Text>
             </ReadonlyField>
             <ReadonlyField label="Departamento">
-              <Text className="font-outfit-regular">
-                {student?.department}
-              </Text>
+              <Text className="font-outfit-regular">{student?.department}</Text>
             </ReadonlyField>
             <ReadonlyField label="Email">
               <Text className="font-outfit-regular">{student?.email}</Text>
@@ -193,9 +240,7 @@ export default function StudentDetailScreen() {
               <Text className="font-outfit-regular">{student?.phone}</Text>
             </ReadonlyField>
             <ReadonlyField label="Semestres Completos">
-              <Text className="font-outfit-regular">
-                {student?.semester}
-              </Text>
+              <Text className="font-outfit-regular">{student?.semester}</Text>
             </ReadonlyField>
 
             <Text className="text-center font-outfit-extralight">

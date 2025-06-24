@@ -3,7 +3,7 @@ import { Text, View } from "react-native";
 import { SandglassIcon } from "../icon";
 
 function Sheet({ children }: { children: React.ReactNode }) {
-    return <View className="bg-gray-200 rounded-2xl p-6 items-center gap-y-5" style={{elevation: 3}}>{children}</View>;
+    return <View className="bg-gray-200 rounded-2xl p-6 items-center gap-y-5">{children}</View>;
 }
 
 function SheetTitle({ icon = "hourglass-outline", children }: { icon?: any; children: React.ReactNode }) {

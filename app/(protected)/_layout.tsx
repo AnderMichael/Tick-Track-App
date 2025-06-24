@@ -1,7 +1,12 @@
 import { SemesterProvider } from "@/context/home";
-import { Stack } from "expo-router";
+import { useSession } from "@/hooks";
+import { Redirect, Slot, Stack } from "expo-router";
 
 export default function ProtectedLayout() {
+  const { isAuthenticated } = useSession();
+
+  if (!isAuthenticated) return <Redirect href="/auth/welcome" />;
+
   return (
     <SemesterProvider>
       <Stack screenOptions={{ headerShown: false }}>

@@ -1,8 +1,11 @@
 import { PercentagesList } from "@/components/app/administrative";
-import { CustomPagination, Screen } from "@/components/common";
-import { usePagination } from "@/hooks";
+import { Screen } from "@/components/common";
 import { usePercentages } from "@/hooks/app";
-import { RelativePathString, useLocalSearchParams, useRouter } from "expo-router";
+import {
+  RelativePathString,
+  useLocalSearchParams,
+  useRouter,
+} from "expo-router";
 import React, { useEffect } from "react";
 import { Text } from "react-native";
 
@@ -11,12 +14,8 @@ const PercentagesListScreen = () => {
   const router = useRouter();
   const scholarshipId = parseInt(id as string);
 
-  const {
-    percentages,
-    isLoading,
-    isFetching,
-    refetch,
-  } = usePercentages(scholarshipId);
+  const { percentages, isLoading, isFetching, refetch } =
+    usePercentages(scholarshipId);
 
   useEffect(() => {
     refetch();
