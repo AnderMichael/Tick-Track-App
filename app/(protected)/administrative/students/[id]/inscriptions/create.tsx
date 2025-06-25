@@ -81,8 +81,8 @@ export default function CreateInscriptionScreen() {
       />
       <ProcessingModal visible={isLoadingCommitments || isCreating} />
 
-      <Screen.Section>
-        <ScrollView contentContainerStyle={{ gap: 20, paddingVertical: 15 }}>
+      <ScrollView contentContainerStyle={{ gap: 20, paddingVertical: 15 }}>
+        <Screen.Section>
           <Screen.SubTitle>Beca</Screen.SubTitle>
 
           <Controller
@@ -97,8 +97,8 @@ export default function CreateInscriptionScreen() {
               />
             )}
           />
-        </ScrollView>
-      </Screen.Section>
+        </Screen.Section>
+      </ScrollView>
 
       <View className="px-5 my-5">
         <Button onPress={handleSubmit(onSubmit)}>Inscribirse</Button>

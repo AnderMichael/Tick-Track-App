@@ -1,59 +1,69 @@
-import { useSemester } from '@/context/home';
 import { formatDate } from '@/helpers/common';
-import { useSession } from '@/hooks';
-import { useTransactionsQuery } from '@/store/api/app';
-import React, { useState } from 'react';
-import { FlatList, RefreshControl, Text, View } from 'react-native';
-import { Screen } from '../containers';
+import { Transaction } from '@/interfaces/student';
+import React, { useCallback } from 'react';
+import {
+  FlatList,
+  ListRenderItem,
+  RefreshControl,
+  Text,
+  View,
+} from 'react-native';
 import { TransactionCard } from '../cards';
+import { Screen } from '../containers';
 
-const TransactionsList = () => {
-    const { semester } = useSemester();
-    const { user } = useSession();
-    const [page, setPage] = useState(1);
-    const limit = 10;
+interface Props {
+  transactions: Transaction[];
+  isLoading?: boolean;
+  refetch?: () => void;
+}
 
-    const {
-        data,
-        isFetching,
-        isLoading,
-        refetch,
-    } = useTransactionsQuery({ student_upb_code: user!.upbCode, semester_id: semester!.value, page, limit });
+const TransactionsList = ({
+  transactions,
+  isLoading = false,
+  refetch,
+}: Props) => {
+  const renderItem: ListRenderItem<Transaction> = useCallback(
+    ({ item }) => (
+      <TransactionCard transaction_id={item.id}>
+        <TransactionCard.Title>{item.work_name}</TransactionCard.Title>
+        <TransactionCard.Supervisor supervisor_name={item.author_name} />
+        <TransactionCard.Date date={formatDate(item.date)} />
+        <TransactionCard.Id id={`TRB-${item.id}`} />
+        <TransactionCard.Hours hours={item.hours} />
+      </TransactionCard>
+    ),
+    []
+  );
 
-    const renderItem = ({ item }: any) => (
-        <TransactionCard transaction_id={item.id}>
-            <TransactionCard.Title>{item.work_name}</TransactionCard.Title>
-            {/* <TransactionCard.Supervisor supervisor_name={item.administrative_name} /> */}
-            <TransactionCard.Date date={formatDate(item.date)} />
-            <TransactionCard.Id id={`TRB-${item.id}`} />
-            <TransactionCard.Hours hours={item.hours} />
-        </TransactionCard>
-    );
-
-    if (isFetching || isLoading) {
-        return <Screen.Section>
-            <TransactionCard isLoading={isFetching || isLoading} />
-            <TransactionCard isLoading={isFetching || isLoading} />
-            <TransactionCard isLoading={isFetching || isLoading} />
-            <TransactionCard isLoading={isFetching || isLoading} />
-            <TransactionCard isLoading={isFetching || isLoading} />
-        </Screen.Section>
-    }
-
-
+  if (isLoading) {
     return (
-        <FlatList
-            data={data?.data || []}
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={renderItem}
-            contentContainerStyle={{ paddingHorizontal: 20, paddingVertical: 15 }}
-            refreshControl={
-                <RefreshControl refreshing={isFetching} onRefresh={refetch} />
-            }
-            ItemSeparatorComponent= {() => <View className='h-4' />}
-            ListEmptyComponent={<Text className='text-center text-2xl font-outfit-extralight'>Oops! Al parecer no cuentas con transacciones este semestre</Text>}
-        />
+      <Screen.Section>
+        <TransactionCard isLoading />
+        <TransactionCard isLoading />
+        <TransactionCard isLoading />
+        <TransactionCard isLoading />
+        <TransactionCard isLoading />
+      </Screen.Section>
     );
+  }
+
+  return (
+    <FlatList
+      data={transactions}
+      keyExtractor={(item) => item.id.toString()}
+      renderItem={renderItem}
+      contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 15 }}
+      refreshControl={
+        <RefreshControl refreshing={isLoading} onRefresh={refetch} />
+      }
+      ItemSeparatorComponent={() => <View className="h-4" />}
+      ListEmptyComponent={
+        <Text className="text-center text-2xl font-outfit-extralight">
+          Oops! Al parecer no cuentas con transacciones este semestre
+        </Text>
+      }
+    />
+  );
 };
 
 export default TransactionsList;

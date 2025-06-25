@@ -18,6 +18,7 @@ interface Administrative {
     supervisorRoleId: number;
     scholarshipOfficerRoleId: number;
     departments: { id: number; value: string }[];
+    qualifications: { id: number; value: string }[];
   };
 }
 

@@ -24,7 +24,7 @@ const WorkList = ({ works, isLoading = false, refetch }: Props) => {
     ({ item: work }) => (
       <WorkCard work_id={work.id}>
         <WorkCard.Title>{work.title}</WorkCard.Title>
-        <WorkCard.Date date={formatDate(work.date_begin)} />
+        <WorkCard.Date date={formatDate(work.created_at)} />
         <WithRole allowed={[Role.SCHOLARSHIP_OFFICER, Role.ADMIN]}>
           <WorkCard.Administrative name={work.administrative.name} />
         </WithRole>

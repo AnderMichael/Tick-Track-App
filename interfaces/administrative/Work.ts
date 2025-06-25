@@ -18,4 +18,5 @@ export interface Work {
   }
   semester_id: number
   is_open: boolean
+  created_at: string
 }

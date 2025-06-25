@@ -28,7 +28,7 @@ const WorkTransactionsList = ({
         <TransactionCard.Title>
           {transaction.student_name}
         </TransactionCard.Title>
-        {/* <TransactionCard.Supervisor supervisor_name={item.administrative_name} /> */}
+        <TransactionCard.Supervisor supervisor_name={transaction.author_name} />
         <TransactionCard.Date date={formatDate(transaction.date)} />
         <TransactionCard.Id id={`Nro. ${transaction.id}`} />
         <TransactionCard.Hours hours={transaction.hours} />

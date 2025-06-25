@@ -16,6 +16,7 @@ export function useWorks(
     refetch,
   } = useWorksQuery({
     administrative_upb_code: workFilters.author,
+    department_id: workFilters.department,
     semester_id: semester!.value,
     page,
     limit,

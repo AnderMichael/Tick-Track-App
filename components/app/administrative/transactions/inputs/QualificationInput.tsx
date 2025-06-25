@@ -1,7 +1,7 @@
-import { OptionDropdown } from '@/components/common';
-import { Control, Controller, FieldValues, Path } from 'react-hook-form';
-import { Text, View } from 'react-native';
-
+import { OptionDropdown } from "@/components/common";
+import { useSession } from "@/hooks";
+import { Control, Controller, FieldValues, Path } from "react-hook-form";
+import { Text, View } from "react-native";
 
 type QualificationItem = {
   label: string;
@@ -14,18 +14,19 @@ type Props<T extends FieldValues> = {
   placeholder?: string;
 };
 
-const qualifications: QualificationItem[] = [
-  { label: 'Excelente', value: 1 },
-  { label: 'Bueno', value: 2 },
-  { label: 'Regular', value: 3 },
-  { label: 'Insuficiente', value: 4 },
-];
-
 export function QualificationDropdown<T extends FieldValues>({
   control,
   name,
-  placeholder = 'Calificación',
+  placeholder = "Calificación",
 }: Props<T>) {
+  const { user } = useSession();
+
+  const qualifications =
+    user!.administrative?.utils.qualifications.map((q) => ({
+      label: q.value,
+      value: q.id,
+    })) ?? [];
+    
   return (
     <View className="w-full">
       <Controller
@@ -33,14 +34,15 @@ export function QualificationDropdown<T extends FieldValues>({
         name={name}
         render={({ field: { value, onChange }, fieldState: { error } }) => {
           // Convertimos string a objeto de dropdown
-          const selected = qualifications.find(q => q.value === value) ?? null;
+          const selected =
+            qualifications.find((q) => q.value === value) ?? null;
 
           return (
             <>
               <OptionDropdown
                 data={qualifications}
                 value={selected}
-                onChange={item => onChange(item.value)}
+                onChange={(item) => onChange(item.value)}
                 placeholder={placeholder}
               />
               {error?.message && (

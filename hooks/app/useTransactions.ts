@@ -5,10 +5,11 @@ interface TransactionsQueryParams {
     limit?: number;
     work_id?: number;
     administrative_upb_code?: number;
+    student_upb_code?: number;
     semester_id: number;
 }
 
-export function useTransactions({ page = 1, limit = 10, work_id, semester_id, administrative_upb_code }: TransactionsQueryParams) {
+export function useTransactions({ page = 1, limit = 10, work_id, semester_id, administrative_upb_code, student_upb_code }: TransactionsQueryParams) {
     const {
         data: transactions,
         isFetching,
@@ -16,6 +17,7 @@ export function useTransactions({ page = 1, limit = 10, work_id, semester_id, ad
         refetch,
     } = useTransactionsQuery({
         administrative_upb_code,
+        student_upb_code,
         semester_id,
         page,
         limit,

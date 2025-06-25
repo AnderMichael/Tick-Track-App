@@ -26,7 +26,7 @@ type TransactionForm = InferType<typeof transactionSchema>;
 export default function PayHoursScreen() {
   const { work } = useCurrentWork();
   const { user } = useSession();
-  const { fullName, upbCode, commitment_id } = useLocalSearchParams();
+  const { fullName, upbCode, inscription_id } = useLocalSearchParams();
   const [payment, { isLoading, error: errorPayment }] = usePaymentMutation();
   const [errorVisible, setErrorVisible] = useState(false);
 
@@ -48,7 +48,7 @@ export default function PayHoursScreen() {
       await payment({
         hours: hours,
         comment_administrative: comment ? comment : "(Sin Comentarios)",
-        commitment_id: parseInt(commitment_id as string),
+        inscription_id: parseInt(inscription_id as string),
         work_id: work_id,
         date: new Date().toISOString(),
         qualification_id: qualification,

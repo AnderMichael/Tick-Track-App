@@ -3,3 +3,4 @@ export * from "./ScholashipOfficerFilters";
 export * from "./StudentFilters";
 export * from "./SupervisorFilters";
 export * from "./WorkFilters";
+export * from "./TransactionFilters";

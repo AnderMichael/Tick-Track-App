@@ -2,7 +2,7 @@ export interface StudentPaymentInfo {
     upbCode: number,
     firstName: string,
     fatherLastName: string,
-    commitment_id: number
+    inscription_id: number
 }
 
 export interface Payment {
@@ -11,7 +11,7 @@ export interface Payment {
     // comment_student: string;
     comment_administrative?: string;
     work_id: number;
-    commitment_id: number;
+    inscription_id: number;
     qualification_id: number;
     author_id: number;
 }
