@@ -12,6 +12,7 @@ import {
 import { useCurrentWork } from "@/context/administrative";
 import { transactionSchema } from "@/forms/administrative";
 import { parseAPIError } from "@/helpers/common";
+import { useSession } from "@/hooks";
 import { usePaymentMutation } from "@/store/api/app";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useLocalSearchParams, useRouter } from "expo-router";
@@ -24,7 +25,7 @@ type TransactionForm = InferType<typeof transactionSchema>;
 
 export default function PayHoursScreen() {
   const { work } = useCurrentWork();
-
+  const { user } = useSession();
   const { fullName, upbCode, commitment_id } = useLocalSearchParams();
   const [payment, { isLoading, error: errorPayment }] = usePaymentMutation();
   const [errorVisible, setErrorVisible] = useState(false);
@@ -42,7 +43,7 @@ export default function PayHoursScreen() {
 
   const handlePayment = async (data: TransactionForm) => {
     console.log(data);
-    const { comment, hours } = data;
+    const { comment, hours, qualification } = data;
     try {
       await payment({
         hours: hours,
@@ -50,6 +51,8 @@ export default function PayHoursScreen() {
         commitment_id: parseInt(commitment_id as string),
         work_id: work_id,
         date: new Date().toISOString(),
+        qualification_id: qualification,
+        author_id: user?.upbCode ?? 0,
       }).unwrap();
       ToastAndroid.show("Pago registrado exitosamente", ToastAndroid.SHORT);
       router.back();

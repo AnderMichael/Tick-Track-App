@@ -12,4 +12,6 @@ export interface Payment {
     comment_administrative?: string;
     work_id: number;
     commitment_id: number;
+    qualification_id: number;
+    author_id: number;
 }

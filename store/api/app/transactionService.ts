@@ -39,9 +39,9 @@ export const transactionsApi = createApi({
                 method: "DELETE",
             }),
         }),
-        processAccount: builder.mutation<StudentPaymentInfo, { account_key: string }>({
-            query: ({ account_key }) => ({
-                url: `/process-account`,
+        processAccount: builder.mutation<StudentPaymentInfo, { account_key: string, semesterId: number }>({
+            query: ({ account_key, semesterId }) => ({
+                url: `/process-account/${semesterId}`,
                 method: "POST",
                 body: { account_key },
             }),
