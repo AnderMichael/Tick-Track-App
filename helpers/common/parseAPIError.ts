@@ -3,7 +3,7 @@ import { SerializedError } from "@reduxjs/toolkit";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 
 export function parseAPIError(
-    error: FetchBaseQueryError | SerializedError | undefined | null,
+    error: FetchBaseQueryError | SerializedError | undefined | null | any,
     fallback: string = "Ocurrió un error inesperado"
 ): string {
     if (!error) return fallback;

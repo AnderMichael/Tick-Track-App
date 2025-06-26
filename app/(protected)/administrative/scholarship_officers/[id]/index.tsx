@@ -2,14 +2,17 @@ import { ReadonlyField } from "@/components/app";
 import {
   Button,
   ConfirmationModal,
+  ErrorModal,
   LockButton,
   ProcessingModal,
   Screen,
 } from "@/components/common";
+import { parseAPIError } from "@/helpers/common";
 import { useAuth } from "@/hooks";
 import { useModal, useScholarshipOfficer } from "@/hooks/app";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { useState } from "react";
 import {
   RefreshControl,
   ScrollView,
@@ -21,6 +24,8 @@ import {
 export default function ScholarshipOfficerDetailScreen() {
   const { id: scholarship_officer_id } = useLocalSearchParams();
   const router = useRouter();
+  const [errorVisible, setErrorVisible] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const {
     isVisible: isVisibleDeleteModal,
@@ -40,7 +45,11 @@ export default function ScholarshipOfficerDetailScreen() {
     closeModal: closeResetPasswordModal,
   } = useModal();
 
-  const { resetPassword, isLoading: isLoadingResetPassword } = useAuth();
+  const {
+    resetPassword,
+    isLoading: isLoadingResetPassword,
+    error: errorResetPassword,
+  } = useAuth();
 
   const {
     officer,
@@ -48,6 +57,7 @@ export default function ScholarshipOfficerDetailScreen() {
     isLoadingDeletion,
     refetch,
     removeOfficer,
+    errorDeletion,
     lockOfficer,
     unlockOfficer,
   } = useScholarshipOfficer({
@@ -56,33 +66,45 @@ export default function ScholarshipOfficerDetailScreen() {
 
   const handleDelete = async () => {
     try {
+      closeDeleteModal();
       await removeOfficer();
       router.back();
     } catch (err) {
       console.error("Error deleting scholarship officer", err);
+      setErrorMessage(parseAPIError(err, "No se pudo eliminar al encargado."));
+      setErrorVisible(true);
     }
   };
 
   const handleLock = async () => {
     try {
-      await lockOfficer();
       closeLockModal();
+      await lockOfficer();
     } catch (err) {
       console.error("Error locking scholarship officer", err);
+      setErrorMessage(parseAPIError(err, "No se pudo bloquear al encargado."));
+      setErrorVisible(true);
     }
   };
 
   const handleResetPassword = async () => {
     if (!scholarship_officer_id) return;
     try {
-      await resetPassword({ upbCode: parseInt(scholarship_officer_id as string) });
+      await resetPassword({
+        upbCode: parseInt(scholarship_officer_id as string),
+      });
       refetch();
     } catch (err) {
       console.error("Error resetting password", err);
+      setErrorMessage(
+        parseAPIError(err, "No se pudo reiniciar la contraseña.")
+      );
+      setErrorVisible(true);
     }
   };
 
-  if (isLoading || isLoadingDeletion) return <ProcessingModal visible />;
+  if (isLoading || isLoadingDeletion || isLoadingResetPassword)
+    return <ProcessingModal visible />;
 
   return (
     <>
@@ -114,6 +136,12 @@ export default function ScholarshipOfficerDetailScreen() {
         cancelText="Cancelar"
         onConfirm={handleResetPassword}
         onCancel={closeResetPasswordModal}
+      />
+
+      <ErrorModal
+        visible={errorVisible}
+        onClose={() => setErrorVisible(false)}
+        message={errorMessage}
       />
 
       <Screen>
@@ -159,14 +187,10 @@ export default function ScholarshipOfficerDetailScreen() {
 
           <Screen.Section>
             <ReadonlyField label="Primer Nombre">
-              <Text className="font-outfit-regular">
-                {officer?.firstName}
-              </Text>
+              <Text className="font-outfit-regular">{officer?.firstName}</Text>
             </ReadonlyField>
             <ReadonlyField label="Segundo Nombre">
-              <Text className="font-outfit-regular">
-                {officer?.secondName}
-              </Text>
+              <Text className="font-outfit-regular">{officer?.secondName}</Text>
             </ReadonlyField>
             <ReadonlyField label="Apellido Paterno">
               <Text className="font-outfit-regular">
@@ -182,9 +206,7 @@ export default function ScholarshipOfficerDetailScreen() {
               <Text className="font-outfit-regular">{officer?.upbCode}</Text>
             </ReadonlyField>
             <ReadonlyField label="Departamento">
-              <Text className="font-outfit-regular">
-                {officer?.department}
-              </Text>
+              <Text className="font-outfit-regular">{officer?.department}</Text>
             </ReadonlyField>
             <ReadonlyField label="Email">
               <Text className="font-outfit-regular">{officer?.email}</Text>

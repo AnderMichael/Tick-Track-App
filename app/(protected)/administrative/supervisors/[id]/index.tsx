@@ -2,14 +2,17 @@ import { ReadonlyField } from "@/components/app";
 import {
   Button,
   ConfirmationModal,
+  ErrorModal,
   LockButton,
   ProcessingModal,
   Screen,
 } from "@/components/common";
+import { parseAPIError } from "@/helpers/common";
 import { useAuth } from "@/hooks";
 import { useModal, useSupervisor } from "@/hooks/app";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { useState } from "react";
 import {
   RefreshControl,
   ScrollView,
@@ -21,6 +24,9 @@ import {
 export default function SupervisorDetailScreen() {
   const { id: supervisor_id } = useLocalSearchParams();
   const router = useRouter();
+
+  const [errorVisible, setErrorVisible] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const {
     isVisible: isVisibleDeleteModal,
@@ -56,36 +62,49 @@ export default function SupervisorDetailScreen() {
 
   const handleDelete = async () => {
     try {
+      closeDeleteModal();
       await removeSupervisor();
       router.back();
     } catch (err) {
       console.error("Error deleting supervisor", err);
+      setErrorMessage(parseAPIError(err, "No se pudo eliminar al supervisor."));
+      setErrorVisible(true);
     }
   };
 
   const handleLock = async () => {
     try {
-      await lockSupervisor();
       closeLockModal();
+      await lockSupervisor();
     } catch (err) {
       console.error("Error locking supervisor", err);
+      setErrorMessage(parseAPIError(err, "No se pudo bloquear al supervisor."));
+      setErrorVisible(true);
     }
   };
 
   const handleResetPassword = async () => {
     if (!supervisor_id) return;
     try {
-      await resetPassword({ upbCode: parseInt(supervisor_id as string) });
+      const { error } = await resetPassword({
+        upbCode: parseInt(supervisor_id as string),
+      });
+      if (error) throw error;
       refetch();
     } catch (err) {
       console.error("Error resetting password", err);
+      setErrorMessage(
+        parseAPIError(err, "No se pudo reiniciar la contraseña.")
+      );
+      setErrorVisible(true);
     }
   };
-  if (isLoading || isLoadingDeletion) return <ProcessingModal visible />;
+
+  if (isLoading || isLoadingDeletion || isLoadingResetPassword)
+    return <ProcessingModal visible />;
 
   return (
     <>
-      {/* Confirmación para eliminar */}
       <ConfirmationModal
         visible={isVisibleDeleteModal}
         title="Eliminar Supervisor"
@@ -96,7 +115,6 @@ export default function SupervisorDetailScreen() {
         onCancel={closeDeleteModal}
       />
 
-      {/* Confirmación para bloquear */}
       <ConfirmationModal
         visible={isVisibleLockModal}
         title="Bloquear Supervisor"
@@ -107,7 +125,6 @@ export default function SupervisorDetailScreen() {
         onCancel={closeLockModal}
       />
 
-      {/* Confirmación para reiniciar contraseña */}
       <ConfirmationModal
         visible={isVisibleResetPasswordModal}
         title="Reiniciar Contraseña"
@@ -116,6 +133,12 @@ export default function SupervisorDetailScreen() {
         cancelText="Cancelar"
         onConfirm={handleResetPassword}
         onCancel={closeResetPasswordModal}
+      />
+
+      <ErrorModal
+        visible={errorVisible}
+        onClose={() => setErrorVisible(false)}
+        message={errorMessage}
       />
 
       <Screen>

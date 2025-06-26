@@ -66,7 +66,7 @@ export default function EditInscriptionScreen() {
   const [editInscription, { isLoading: isEditing, error: editError }] =
     useEditInscriptionMutation();
 
-  const [uninscribe, { isLoading: isUnsubscribing }] =
+  const [uninscribe, { isLoading: isUnsubscribing, error: errorUninscribing }] =
     useUninscribeFromSemesterMutation();
 
   const {
@@ -98,11 +98,13 @@ export default function EditInscriptionScreen() {
 
   const handleDelete = async () => {
     try {
-      await uninscribe({
+      closeDeleteModal();
+      const { error } = await uninscribe({
         upbCode: student!.upbCode,
         semester_id: inscription!.semester.id,
         commitment_id: inscription!.commitmentId,
       });
+      if (error) throw error;
       router.back();
     } catch {
       setErrorVisible(true);
@@ -126,7 +128,7 @@ export default function EditInscriptionScreen() {
           visible={errorVisible}
           onClose={() => setErrorVisible(false)}
           message={parseAPIError(
-            fetchError || editError || loadError,
+            fetchError || editError || loadError || errorUninscribing,
             "No se pudo actualizar la inscripción."
           )}
         />
@@ -160,7 +162,9 @@ export default function EditInscriptionScreen() {
 
         <View className="absolute px-5 my-5 w-full bottom-0 gap-2">
           <Button onPress={handleSubmit(onSubmit)}>Guardar cambios</Button>
-          <Button onPress={openDeleteModal} color="white" textColor="black">Anular</Button>
+          <Button onPress={openDeleteModal} color="white" textColor="black">
+            Anular
+          </Button>
         </View>
       </Screen>
     </>

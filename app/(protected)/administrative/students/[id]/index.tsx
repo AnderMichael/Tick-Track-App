@@ -2,11 +2,13 @@ import { ReadonlyField } from "@/components/app";
 import {
   Button,
   ConfirmationModal,
+  ErrorModal,
   LockButton,
   ProcessingModal,
   Screen,
 } from "@/components/common";
 import { useCurrentStudent } from "@/context/administrative";
+import { parseAPIError } from "@/helpers/common";
 import { useAuth } from "@/hooks";
 import { useModal, useStudent } from "@/hooks/app";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
@@ -15,7 +17,7 @@ import {
   useLocalSearchParams,
   useRouter,
 } from "expo-router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   RefreshControl,
   ScrollView,
@@ -61,7 +63,10 @@ export default function StudentDetailScreen() {
   });
 
   const { setStudent: setCurrentStudent } = useCurrentStudent();
-  
+
+  const [errorVisible, setErrorVisible] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
   useEffect(() => {
     if (student) {
       setCurrentStudent(student);
@@ -70,19 +75,22 @@ export default function StudentDetailScreen() {
 
   const handleDelete = async () => {
     try {
+      closeDeleteModal();
       await removeStudent();
       router.back();
     } catch (err) {
-      console.error("Error deleting student", err);
+      setErrorMessage(parseAPIError(err, "No se pudo eliminar al estudiante."));
+      setErrorVisible(true);
     }
   };
 
   const handleLock = async () => {
     try {
-      await lockStudent();
       closeLockModal();
+      await lockStudent();
     } catch (err) {
-      console.error("Error locking student", err);
+      setErrorMessage(parseAPIError(err, "No se pudo bloquear al estudiante."));
+      setErrorVisible(true);
     }
   };
 
@@ -92,11 +100,15 @@ export default function StudentDetailScreen() {
       await resetPassword({ upbCode: parseInt(student_id as string) });
       refetch();
     } catch (err) {
-      console.error("Error resetting password", err);
+      setErrorMessage(
+        parseAPIError(err, "No se pudo reiniciar la contraseña.")
+      );
+      setErrorVisible(true);
     }
   };
 
-  if (isLoading || isLoadingDeletion) return <ProcessingModal visible />;
+  if (isLoading || isLoadingDeletion || isLoadingResetPassword)
+    return <ProcessingModal visible />;
 
   return (
     <>
@@ -128,6 +140,12 @@ export default function StudentDetailScreen() {
         cancelText="Cancelar"
         onConfirm={handleResetPassword}
         onCancel={closeResetPasswordModal}
+      />
+
+      <ErrorModal
+        visible={errorVisible}
+        onClose={() => setErrorVisible(false)}
+        message={errorMessage}
       />
 
       <Screen>
@@ -175,12 +193,9 @@ export default function StudentDetailScreen() {
               className="bg-black rounded-2xl p-4 h-28"
               onPress={() => {
                 router.push({
-                  pathname: `/(protected)/administrative/students/${
-                    student_id as string
-                  }/scholarship` as RelativePathString,
-                  params: {
-                    student_id: student_id as string,
-                  },
+                  pathname:
+                    `/(protected)/administrative/students/${student_id}/scholarship` as RelativePathString,
+                  params: { student_id: student_id as string },
                 });
               }}
             >
@@ -193,12 +208,9 @@ export default function StudentDetailScreen() {
               className="bg-black rounded-2xl p-4 h-28"
               onPress={() => {
                 router.push({
-                  pathname: `/(protected)/administrative/students/${
-                    student_id as string
-                  }/inscriptions` as RelativePathString,
-                  params: {
-                    student_id: student_id as string,
-                  },
+                  pathname:
+                    `/(protected)/administrative/students/${student_id}/inscriptions` as RelativePathString,
+                  params: { student_id: student_id as string },
                 });
               }}
             >

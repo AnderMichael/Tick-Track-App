@@ -21,7 +21,11 @@ import {
 export default function WorkDetailScreen() {
   const { id: work_id } = useLocalSearchParams();
   const router = useRouter();
-  const { isVisible, closeModal, openModal } = useModal();
+  const {
+    isVisible: isDeleteModal,
+    closeModal: closeDeleteModal,
+    openModal: openDeleteModal,
+  } = useModal();
   const {
     isVisible: isVisibleLockModal,
     closeModal: closeLockModal,
@@ -50,6 +54,7 @@ export default function WorkDetailScreen() {
 
   async function handleDeleteWork() {
     try {
+      closeDeleteModal();
       await removeWork();
       router.back();
     } catch (error) {
@@ -59,8 +64,8 @@ export default function WorkDetailScreen() {
 
   async function handleLockWork() {
     try {
-      await lockWork();
       closeLockModal();
+      await lockWork();
     } catch (error) {
       console.error("Error al desbloquear el trabajo:", error);
     }
@@ -70,14 +75,14 @@ export default function WorkDetailScreen() {
   return (
     <>
       <ConfirmationModal
-        visible={isVisible}
+        visible={isDeleteModal}
         title="Eliminar Trabajo"
         message="¿Estás seguro de que deseas eliminar este trabajo? Esta acción no se puede deshacer."
         confirmText="Eliminar"
         cancelText="Cancelar"
         onConfirm={handleDeleteWork}
         onCancel={() => {
-          closeModal();
+          closeDeleteModal();
         }}
       />
       <ConfirmationModal
@@ -124,7 +129,7 @@ export default function WorkDetailScreen() {
                   className="bg-gray-200 rounded-full p-3"
                   style={{ opacity: work!.is_open ? 1 : 0.4 }}
                   disabled={!work!.is_open}
-                  onPress={openModal}
+                  onPress={openDeleteModal}
                 >
                   <MaterialIcons name="delete" size={20} color="black" />
                 </TouchableOpacity>

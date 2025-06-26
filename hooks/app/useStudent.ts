@@ -26,98 +26,48 @@ export function useStudent({ student_id }: StudentQueryParams = {}) {
     { skip: !enableQuery }
   );
 
-  const [
-    createStudent,
-    {
-      isLoading: isLoadingCreation,
-      isError: isErrorCreation,
-      error: errorCreation,
-    },
-  ] = useCreateStudentMutation();
+  const [createStudent, { isLoading: isLoadingCreation, isError: isErrorCreation, error: errorCreation }] =
+    useCreateStudentMutation();
 
-  const [
-    updateStudent,
-    {
-      isLoading: isLoadingUpdate,
-      isError: isErrorUpdate,
-      error: errorUpdate,
-    },
-  ] = useEditStudentMutation();
+  const [updateStudent, { isLoading: isLoadingUpdate, isError: isErrorUpdate, error: errorUpdate }] =
+    useEditStudentMutation();
 
-  const [
-    deleteStudent,
-    {
-      isLoading: isLoadingDeletion,
-      isError: isErrorDeletion,
-      error: errorDeletion,
-    },
-  ] = useDeleteStudentMutation();
+  const [deleteStudent, { isLoading: isLoadingDeletion, isError: isErrorDeletion, error: errorDeletion }] =
+    useDeleteStudentMutation();
 
-  const [
-    lockStudentMutation,
-    {
-      isLoading: isLoadingLock,
-      isError: isErrorLock,
-      error: errorLock,
-    },
-  ] = useLockStudentMutation();
+  const [lockStudentMutation, { isLoading: isLoadingLock, isError: isErrorLock, error: errorLock }] =
+    useLockStudentMutation();
 
-  const [
-    unlockStudentMutation,
-    {
-      isLoading: isLoadingUnlock,
-      isError: isErrorUnlock,
-      error: errorUnlock,
-    },
-  ] = useUnlockStudentMutation();
+  const [unlockStudentMutation, { isLoading: isLoadingUnlock, isError: isErrorUnlock, error: errorUnlock }] =
+    useUnlockStudentMutation();
 
   async function createNewStudent(data: CreateStudent) {
-    try {
-      await createStudent(data).unwrap();
-    } catch (error) {
-      console.error("Error creating student:", error);
-      throw errorCreation;
-    }
+    await createStudent(data).unwrap();
+    if (errorCreation) throw errorCreation;
   }
 
   async function editStudent(data: Partial<CreateStudent>) {
     if (!student_id) throw new Error("editStudent requires student_id");
-    try {
-      await updateStudent({ id: student_id, body: data }).unwrap();
-    } catch (error) {
-      console.error("Error updating student:", error);
-      throw error;
-    }
+    await updateStudent({ id: student_id, body: data }).unwrap();
+    if (errorUpdate) throw errorUpdate;
   }
 
   async function removeStudent() {
     if (!student_id) throw new Error("removeStudent requires student_id");
-    try {
-      await deleteStudent({ id: student_id }).unwrap();
-    } catch (error) {
-      console.error("Error deleting student:", error);
-      throw error;
-    }
+    await deleteStudent({ id: student_id }).unwrap();
+    if (errorDeletion) throw errorDeletion;
   }
 
   async function lockStudent() {
     if (!student_id) throw new Error("lockStudent requires student_id");
-    try {
-      await lockStudentMutation({ upbCode: student_id }).unwrap();
-    } catch (error) {
-      console.error("Error locking student:", error);
-      throw error;
-    }
+    await lockStudentMutation({ upbCode: student_id }).unwrap();
+    if (errorLock) throw errorLock;
   }
 
   async function unlockStudent() {
     if (!student_id) throw new Error("unlockStudent requires student_id");
-    try {
-      await unlockStudentMutation({ upbCode: student_id }).unwrap();
-    } catch (error) {
-      console.error("Error unlocking student:", error);
-      throw error;
-    }
+    await unlockStudentMutation({ upbCode: student_id }).unwrap();
+    if (errorUnlock) throw errorUnlock;
   }
 
   return {
