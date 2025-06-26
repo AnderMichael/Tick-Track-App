@@ -55,7 +55,7 @@ const InscriptionCard = ({
         {isCompleted && (
           <View className="mt-2 bg-green-700 rounded-full px-3 py-1 self-start">
             <Text className="text-white font-outfit-medium text-xs">
-              Inscripción completada
+              Trabajo Completo
             </Text>
           </View>
         )}

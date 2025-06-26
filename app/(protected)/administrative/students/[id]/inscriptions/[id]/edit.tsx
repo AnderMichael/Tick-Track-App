@@ -15,12 +15,14 @@ import {
   useUninscribeFromSemesterMutation,
 } from "@/store/api/app";
 
+import { HourCards } from "@/components/app/administrative";
 import { useModal } from "@/hooks/app";
+import { MaterialIcons } from "@expo/vector-icons";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { RelativePathString, useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { ScrollView, View } from "react-native";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import * as yup from "yup";
 
 const schema = yup.object().shape({
@@ -55,7 +57,7 @@ export default function EditInscriptionScreen() {
     control,
     handleSubmit,
     reset,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = useForm<FormType>({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -141,8 +143,8 @@ export default function EditInscriptionScreen() {
           }
         />
 
-        <Screen.Section>
-          <ScrollView contentContainerStyle={{ gap: 20, paddingVertical: 15 }}>
+        <ScrollView contentContainerStyle={{ gap: 20, paddingVertical: 15 }}>
+          <Screen.Section>
             <Screen.SubTitle>Beca</Screen.SubTitle>
 
             <Controller
@@ -157,15 +159,44 @@ export default function EditInscriptionScreen() {
                 />
               )}
             />
-          </ScrollView>
-        </Screen.Section>
+            <View className="my-5 w-full bottom-0 gap-2">
+              <Button onPress={handleSubmit(onSubmit)} disabled={!isDirty}>
+                Cambiar Beca
+              </Button>
+              <Button onPress={openDeleteModal} color="white" textColor="black">
+                Anular Inscripción
+              </Button>
+            </View>
+            <Screen.SubTitle>Detalle</Screen.SubTitle>
 
-        <View className="absolute px-5 my-5 w-full bottom-0 gap-2">
-          <Button onPress={handleSubmit(onSubmit)}>Guardar cambios</Button>
-          <Button onPress={openDeleteModal} color="white" textColor="black">
-            Anular
-          </Button>
-        </View>
+            <HourCards
+              upbCode={student!.upbCode}
+              semester_id={inscription?.semester.id}
+              isLoadingInscription={isLoadingInscription}
+            />
+
+            <TouchableOpacity
+              className="bg-black rounded-2xl p-4 h-28"
+              onPress={() => {
+                router.push({
+                  pathname:
+                    `(protected)/administrative/students/${student?.upbCode}/inscriptions/${inscription_id}/transactions` as RelativePathString,
+                  params: {
+                    semester_id: inscription!.semester.id,
+                    semester_name: inscription!.semester.name,
+                  },
+                });
+              }}
+            >
+              <Text className="text-white font-outfit-medium">
+                Transacciones
+              </Text>
+              <View className="absolute bottom-[-30] right-0 opacity-25">
+                <MaterialIcons name="more-time" color="white" size={120} />
+              </View>
+            </TouchableOpacity>
+          </Screen.Section>
+        </ScrollView>
       </Screen>
     </>
   );

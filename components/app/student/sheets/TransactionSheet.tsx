@@ -10,6 +10,7 @@ interface Props {
   student_name: string;
   comment_administrative: string;
   work_name: string;
+  qualification_name: string; // Optional if not used
 }
 
 const TransactionSheet = (fields: Props) => {
@@ -21,6 +22,7 @@ const TransactionSheet = (fields: Props) => {
     student_name,
     comment_administrative,
     work_name,
+    qualification_name
   } = fields;
 
   return (
@@ -44,7 +46,7 @@ const TransactionSheet = (fields: Props) => {
 
       <Sheet.Field>
         <Sheet.Name>Calificación</Sheet.Name>
-        <Sheet.Value>BUENO</Sheet.Value>
+        <Sheet.Value>{qualification_name}</Sheet.Value>
       </Sheet.Field>
 
       <Sheet.Field>

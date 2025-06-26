@@ -8,6 +8,7 @@ export interface Transaction {
     author_name: string;
     student_name: string;
     work_name: string;
+    qualification_name: string;
 }
 
 export interface PaginatedTransactions {

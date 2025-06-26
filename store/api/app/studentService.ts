@@ -253,6 +253,7 @@ export const {
   useUnlockStudentMutation,
   // student
   useTracksInfoQuery,
+  useLazyTracksInfoQuery,
   useCommitmentInfoQuery,
   useCommitmentsByStudentQuery,
   useCreateNewCommitmentMutation,

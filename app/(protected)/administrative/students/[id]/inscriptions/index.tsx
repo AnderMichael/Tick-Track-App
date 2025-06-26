@@ -30,8 +30,6 @@ const InscriptionsScreen = () => {
   useEffect(() => {
     refetch();
     refetchInscriptions();
-    console.log("Refetching inscriptions:", inscriptions);
-    console.log("Refetching semesters:", semesters);
   }, [yearSelected]);
 
   const handleView = (semesterId: number) => {

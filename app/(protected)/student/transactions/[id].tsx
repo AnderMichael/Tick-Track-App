@@ -58,6 +58,7 @@ export default function TransactionDetailScreen() {
     administrative_name,
     work_name,
     student_name,
+    qualification_name,
   } = transactionDetails;
 
   const showNoCommentButtons = !comment_student;
@@ -79,6 +80,7 @@ export default function TransactionDetailScreen() {
             student_name={student_name}
             comment_administrative={comment_administrative}
             work_name={work_name}
+            qualification_name={qualification_name}
           />
           {showNoCommentButtons && (
             <Button onPress={handleWithoutComment}>Sin Comentarios</Button>

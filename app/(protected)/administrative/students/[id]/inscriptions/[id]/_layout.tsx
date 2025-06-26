@@ -1,5 +1,5 @@
 import { CustomHeader } from "@/components/common";
-import { Slot, Stack } from "expo-router";
+import { Stack } from "expo-router";
 
 export default function StudentInscriptionsLayout() {
   return (
@@ -9,9 +9,15 @@ export default function StudentInscriptionsLayout() {
         options={{
           header: () => (
             <CustomHeader>
-              <CustomHeader.Title>Editar Inscripción</CustomHeader.Title>
+              <CustomHeader.Title>Inscripción</CustomHeader.Title>
             </CustomHeader>
           ),
+        }}
+      />
+      <Stack.Screen
+        name="transactions"
+        options={{
+          headerShown: false,
         }}
       />
     </Stack>

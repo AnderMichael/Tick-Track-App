@@ -1,13 +1,13 @@
 import { TransactionSheet } from "@/components/app/administrative";
 import {
-    ConfirmationModal,
-    ProcessingModal,
-    Screen,
+  ConfirmationModal,
+  ProcessingModal,
+  Screen,
 } from "@/components/common";
 import { useTransactionOperationFlow } from "@/context/administrative";
 import { useTransaction } from "@/hooks/app";
 import { router, useLocalSearchParams } from "expo-router";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { RefreshControl, ScrollView, Text, TextInput } from "react-native";
 
 export default function TransactionDetailScreen() {
@@ -45,6 +45,7 @@ export default function TransactionDetailScreen() {
     comment_administrative,
     administrative_name,
     work_name,
+    qualification_name,
     student_name,
   } = transactionDetails;
 
@@ -75,6 +76,7 @@ export default function TransactionDetailScreen() {
               student_name={student_name}
               administrative_name={administrative_name}
               comment_administrative={comment_administrative}
+              qualification_name={qualification_name}
             />
 
             <Text className="text-xl font-outfit-bold">

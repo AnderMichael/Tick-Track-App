@@ -42,7 +42,6 @@ export default function PayHoursScreen() {
   });
 
   const handlePayment = async (data: TransactionForm) => {
-    console.log(data);
     const { comment, hours, qualification } = data;
     try {
       await payment({
