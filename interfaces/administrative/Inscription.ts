@@ -7,4 +7,5 @@ export interface Inscription {
   percentage: number;
   commitmentId: number;
   createdAt: string;
+  is_complete: boolean;
 }

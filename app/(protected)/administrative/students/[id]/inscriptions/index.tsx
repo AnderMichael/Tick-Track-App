@@ -58,6 +58,10 @@ const InscriptionsScreen = () => {
     return inscriptions?.some((i) => i.semester.id === semesterId);
   };
 
+  const findInscriptionBySemesterId = (semesterId: number) => {
+    return inscriptions.find((i) => i.semester.id === semesterId);
+  }
+
   return (
     <Screen>
       <ProcessingModal visible={isLoading || isLoadingInscriptions} />
@@ -90,12 +94,13 @@ const InscriptionsScreen = () => {
           ) : (
             semesters.map((semester) => {
               const enrolled = isStudentEnrolledIn(semester.id);
-
+              const inscription = findInscriptionBySemesterId(semester.id);
               return (
                 <InscriptionCard
                   key={semester.id}
                   semester={enrolled ? semester : undefined}
                   isLoading={false}
+                  isCompleted={inscription?.is_complete}
                   onPressView={(semesterId) => handleView(semesterId)}
                   onPressCreate={() => handleCreate(semester.id)}
                   placeholderCreate={`Inscribir a ${semester.name}`}

@@ -8,6 +8,7 @@ import { Text, TouchableOpacity, View } from "react-native";
 interface InscriptionCardProps {
   semester?: Semester;
   isLoading?: boolean;
+  isCompleted?: boolean;
   onPressView: (semester_id: number) => void;
   onPressCreate?: () => void;
   placeholderCreate?: string;
@@ -16,6 +17,7 @@ interface InscriptionCardProps {
 const InscriptionCard = ({
   semester,
   isLoading,
+  isCompleted = false,
   onPressView,
   onPressCreate,
   placeholderCreate = "Inscribirse a nuevo semestre",
@@ -50,6 +52,13 @@ const InscriptionCard = ({
         </Text>
         <InscriptionCard.Date label="Inicio" date={start_date} />
         <InscriptionCard.Date label="Fin" date={end_date} />
+        {isCompleted && (
+          <View className="mt-2 bg-green-700 rounded-full px-3 py-1 self-start">
+            <Text className="text-white font-outfit-medium text-xs">
+              Inscripción completada
+            </Text>
+          </View>
+        )}
       </View>
       <View className="flex-col justify-center">
         <MaterialIcons name="arrow-forward-ios" color="white" size={20} />
@@ -58,13 +67,7 @@ const InscriptionCard = ({
   );
 };
 
-function InscriptionCardDate({
-  label,
-  date,
-}: {
-  label: string;
-  date: string;
-}) {
+function InscriptionCardDate({ label, date }: { label: string; date: string }) {
   return (
     <View className="flex-row items-center gap-2 mb-2">
       <MaterialCommunityIcons name="calendar" color="white" size={20} />

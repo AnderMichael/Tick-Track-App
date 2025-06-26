@@ -35,4 +35,5 @@ interface Inscription {
   start_date: string;
   end_date: string;
   commitment_id: number;
+  is_complete: boolean;
 }
