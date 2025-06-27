@@ -25,15 +25,16 @@ export const studentApi = createApi({
     // --- ADMINISTRATIVE ROUTES ---
     students: builder.query<
       PaginatedStudents,
-      { page?: number; limit?: number; department_id?: number }
+      { page?: number; limit?: number; department_id?: number; search?: string }
     >({
-      query: ({ page = 1, limit = 10, department_id }) => ({
+      query: ({ page = 1, limit = 10, department_id, search }) => ({
         url: "/students",
         method: "GET",
         params: {
           page,
           limit,
           department_id,
+          search,
         },
       }),
       providesTags: (result) =>

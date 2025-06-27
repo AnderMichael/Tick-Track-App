@@ -18,6 +18,7 @@ export function useWorks(
     administrative_upb_code: workFilters.author,
     department_id: workFilters.department,
     semester_id: semester!.value,
+    search: workFilters.search,
     page,
     limit,
   });

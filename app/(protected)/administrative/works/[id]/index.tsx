@@ -208,21 +208,6 @@ export default function WorkDetailScreen() {
                 </View>
                 <Text className="font-outfit-medium">Escanear QR</Text>
               </TouchableOpacity>
-
-              <TouchableOpacity
-                className="items-center flex-1"
-                style={{ opacity: work!.is_open ? 1 : 0.4 }}
-                disabled={!work!.is_open}
-              >
-                <View className="w-20 h-20 bg-gray-200 rounded-full justify-center items-center mb-2">
-                  <MaterialCommunityIcons
-                    name="qrcode"
-                    size={30}
-                    color="black"
-                  />
-                </View>
-                <Text className="font-outfit-medium">Seleccionar QR</Text>
-              </TouchableOpacity>
             </View>
           </Screen.Section>
         </ScrollView>

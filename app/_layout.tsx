@@ -1,5 +1,5 @@
 import { store } from "@/store/store";
-import { Slot, Stack } from "expo-router";
+import { Slot } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import { Provider } from "react-redux";
@@ -15,6 +15,7 @@ import { Outfit_700Bold } from "@expo-google-fonts/outfit/700Bold";
 import { Outfit_800ExtraBold } from "@expo-google-fonts/outfit/800ExtraBold";
 import { Outfit_900Black } from "@expo-google-fonts/outfit/900Black";
 import { useFonts } from "@expo-google-fonts/outfit/useFonts";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -40,8 +41,10 @@ export default function RootLayout() {
   if (!loaded && !error) return null;
 
   return (
-    <Provider store={store}>
-      <Slot />
-    </Provider>
+    <SafeAreaProvider>
+      <Provider store={store}>
+        <Slot />
+      </Provider>
+    </SafeAreaProvider>
   );
 }

@@ -1,4 +1,5 @@
 import { CustomPagination, Screen, SupervisorsList } from "@/components/common";
+import { UPBCodeSearchBar } from "@/components/common/inputs";
 import { usePagination } from "@/hooks";
 import { useSupervisors } from "@/hooks/app";
 import { useSupervisorFilters } from "@/hooks/app/useSupervisorFilters";
@@ -7,7 +8,7 @@ import { Text } from "react-native";
 
 const SupervisorsListScreen = () => {
   const { page, setPage, resetPagination, limit } = usePagination();
-  const { filters } = useSupervisorFilters();
+  const { filters, setFilters } = useSupervisorFilters();
   const { isLoading, isFetching, refetch, supervisors, total } = useSupervisors(
     page,
     limit,
@@ -24,9 +25,24 @@ const SupervisorsListScreen = () => {
     }
   }, [supervisors]);
 
+  const handleSearch = (inputValue: string) => {
+    const numericText = inputValue.replace(/[^0-9]/g, "");
+    if (numericText.length > 7) {
+      return;
+    }
+    setFilters({ ...filters, search: numericText });
+    refetch();
+  };
+
+  const resetSearch = () => {
+    setFilters({ ...filters, search: undefined });
+    refetch();
+  };
+
   return (
     <>
       <Screen>
+        <UPBCodeSearchBar onSearch={handleSearch} reset={resetSearch} />
         <Screen.Section>
           <Text className="text-base font-outfit-light">
             Mostrando {supervisors.length} de {total}

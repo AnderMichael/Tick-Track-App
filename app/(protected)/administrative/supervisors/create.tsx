@@ -32,7 +32,7 @@ export default function CreateSupervisorScreen() {
       motherLastName: "",
       email: "",
       phone: "",
-      department_id: 0,
+      department_id: filters?.department_id,
       role_id: roleId,
       upbRole: "",
     },
@@ -60,7 +60,7 @@ export default function CreateSupervisorScreen() {
       role_id: roleId,
       upbRole: "",
     });
-  }, []);
+  }, [filters]);
 
   return (
     <>

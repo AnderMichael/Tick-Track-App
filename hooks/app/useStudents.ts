@@ -13,6 +13,7 @@ export function useStudents(
     refetch,
   } = useStudentsQuery({
     department_id: filters.department_id,
+    search: filters.search,
     page,
     limit,
   });

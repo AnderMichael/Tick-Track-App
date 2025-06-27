@@ -4,18 +4,21 @@ interface UseScholarshipOfficersParams {
   page?: number;
   limit?: number;
   department_id?: number;
+  search?: string;
 }
 
 export function useScholarshipOfficers({
   page = 1,
   limit = 10,
   department_id,
+  search
 }: UseScholarshipOfficersParams = {}) {
   const { data, isLoading, isFetching, error, refetch } =
     useScholarshipOfficersQuery({
       page,
       limit,
       department_id,
+      search
     });
 
   return {

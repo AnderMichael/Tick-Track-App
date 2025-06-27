@@ -13,6 +13,7 @@ export function useSupervisors(
     refetch,
   } = useSupervisorsQuery({
     department_id: filters.department_id,
+    search: filters.search,
     page,
     limit,
   });

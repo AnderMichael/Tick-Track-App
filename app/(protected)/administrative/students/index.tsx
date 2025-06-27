@@ -1,4 +1,5 @@
 import { CustomPagination, Screen, StudentsList } from "@/components/common";
+import { UPBCodeSearchBar } from "@/components/common/inputs";
 import { usePagination } from "@/hooks";
 import { useStudents } from "@/hooks/app";
 import { useStudentFilter } from "@/hooks/app/useStudentFilter";
@@ -7,7 +8,7 @@ import { Text } from "react-native";
 
 const StudentsListScreen = () => {
   const { page, setPage, resetPagination, limit } = usePagination();
-  const { filters } = useStudentFilter();
+  const { filters, setFilters } = useStudentFilter();
   const { isLoading, isFetching, refetch, students, total } = useStudents(
     page,
     limit,
@@ -24,9 +25,24 @@ const StudentsListScreen = () => {
     }
   }, [students]);
 
+  const handleSearch = (inputValue: string) => {
+    const numericText = inputValue.replace(/[^0-9]/g, "");
+    if (numericText.length > 7) {
+      return;
+    }
+    setFilters({ ...filters, search: numericText });
+    refetch();
+  };
+
+  const resetSearch = () => {
+    setFilters({ ...filters, search: undefined });
+    refetch();
+  };
+
   return (
     <>
       <Screen>
+        <UPBCodeSearchBar onSearch={handleSearch} reset={resetSearch} />
         <Screen.Section>
           <Text className="text-base font-outfit-light">
             Mostrando {students.length} de {total}

@@ -21,6 +21,7 @@ export const worksApi = createApi({
         administrative_upb_code?: number;
         work_id?: number;
         department_id?: number;
+        search?: string;
       }
     >({
       query: ({
@@ -28,7 +29,8 @@ export const worksApi = createApi({
         page = 1,
         limit = 10,
         administrative_upb_code,
-        department_id
+        department_id,
+        search,
       }) => ({
         url: "/",
         method: "GET",
@@ -37,7 +39,8 @@ export const worksApi = createApi({
           page,
           limit,
           administrative_upb_code,
-          department_id
+          department_id,
+          search,
         },
       }),
       providesTags: (result) =>

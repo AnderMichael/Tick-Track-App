@@ -18,15 +18,16 @@ export const scholarshipOfficersApi = createApi({
   endpoints: (builder) => ({
     scholarshipOfficers: builder.query<
       PaginatedScholarshipOfficers,
-      { page?: number; limit?: number; department_id?: number }
+      { page?: number; limit?: number; department_id?: number; search?: string }
     >({
-      query: ({ page = 1, limit = 10, department_id }) => ({
+      query: ({ page = 1, limit = 10, department_id, search }) => ({
         url: "/",
         method: "GET",
         params: {
           page,
           limit,
           department_id,
+          search,
         },
       }),
       providesTags: (result) =>
